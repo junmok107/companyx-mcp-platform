@@ -1,6 +1,6 @@
 """Step 2: 문서 타입 추정 + 키워드 매칭 가중치로 벡터 검색 결과를 재정렬한다."""
 
-import re
+from korean import terms as _tokenize
 
 TYPE_KEYWORDS = {
     "incident_report": ["장애", "오류", "다운", "타임아웃", "에러"],
@@ -21,10 +21,6 @@ def _infer_query_type(query: str) -> str | None:
     scores = {t: sum(1 for kw in kws if kw in query) for t, kws in TYPE_KEYWORDS.items()}
     best_type = max(scores, key=scores.get)
     return best_type if scores[best_type] > 0 else None
-
-
-def _tokenize(text: str) -> set[str]:
-    return set(re.findall(r"[가-힣A-Za-z0-9]+", text))
 
 
 def rerank(query: str, results: list[dict]) -> list[dict]:

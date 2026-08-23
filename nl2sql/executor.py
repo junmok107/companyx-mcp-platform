@@ -27,9 +27,21 @@ FORBIDDEN_KEYWORDS = [
     "REINDEX", "SET", "RESET",
 ]
 
-# 시스템 카탈로그/관리 함수 접근 차단 (pg_read_file, pg_shadow, pg_stat_* 등).
-# DB 권한으로도 막히지만, 스키마 열거 자체를 애플리케이션 레벨에서도 거부한다.
-SYSTEM_OBJECT_PATTERN = re.compile(r"\bpg_[a-z_]+", re.IGNORECASE)
+# 시스템 카탈로그/관리 함수 접근 차단.
+# pg_ 접두사만 막으면 information_schema와 접두사 없는 서버 정보 함수로 우회된다
+# (감사 실측: information_schema.tables로 스키마 193행 열거, version()으로
+#  "PostgreSQL 14.24 Ubuntu" 노출, current_user로 접속 계정 노출 — 조회 전용 role로도
+#  이들은 기본 허용이라 DB 권한만으로는 막히지 않는다).
+SYSTEM_OBJECT_PATTERN = re.compile(
+    r"\bpg_[a-z_]+"
+    r"|\binformation_schema\b"
+    r"|\bcurrent_(?:user|schema|schemas|database|setting|catalog|query)\b"
+    r"|\bsession_user\b"
+    r"|\bversion\s*\("
+    r"|\binet_(?:server|client)_(?:addr|port)\b"
+    r"|\blo_(?:import|export)\b",
+    re.IGNORECASE,
+)
 
 # SQL 문자열 리터럴 ('...', 내부의 '' 이스케이프 포함)
 STRING_LITERAL_PATTERN = re.compile(r"'(?:[^']|'')*'")
@@ -119,6 +131,20 @@ if __name__ == "__main__":
         ("SELECT * FROM clients WHERE name = 'A--B'", True),
         # 리터럴 마스킹이 실제 공격까지 통과시키지는 않는지 확인
         ("SELECT * FROM clients WHERE name = 'x'; DROP TABLE clients", False),
+        # pg_ 접두사를 피해가는 정보 노출 경로 (감사에서 실제로 뚫렸던 케이스 — 회귀 방지)
+        ("SELECT table_name FROM information_schema.tables", False),
+        ("SELECT column_name FROM information_schema.columns", False),
+        ("SELECT current_user", False),
+        ("SELECT session_user", False),
+        ("SELECT version()", False),
+        ("SELECT current_setting('data_directory')", False),
+        ("SELECT inet_server_addr()", False),
+        ("SELECT lo_import('/etc/hostname')", False),
+        # 위 차단이 정상 쿼리를 막지 않는지 (오탐 방지)
+        ("SELECT name, CASE WHEN region = '서울' THEN 1 ELSE 0 END FROM clients", True),
+        ("SELECT CAST(id AS TEXT) FROM clients", True),
+        ("SELECT name FROM clients ORDER BY id OFFSET 5 LIMIT 3", True),
+        ("SELECT name FROM clients WHERE id IN (SELECT client_id FROM contracts)", True),
     ]
     passed = 0
     for sql, should_pass in test_cases:

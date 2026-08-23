@@ -19,7 +19,7 @@ import re
 KG_RELATION = [
     "담당", "소속", "속한", "맡", "이끄", "이끌", "이끈", "리드",
     "팀장", "부서장", "책임자",
-    "사용", "쓰는", "쓰고", "쓴", "도입한", "관련", "이슈",
+    "사용", "쓰는", "쓰고", "쓴", "도입한", "관련", "이슈", "불만", "클레임",
     "누구", "누가 있", "누가 속",
 ]
 KG_WEIGHT = 3
@@ -34,11 +34,15 @@ ENTITY_PAIR_WEIGHT = 3
 # --- NL2SQL: 측정값 / 집계 표현 ---
 SQL_MEASURE = [
     "매출", "연봉", "금액", "가격", "예산", "건수", "개수",
-    "총", "합계", "평균", "얼마", "몇", "상위", "순으로", "순서", "비싼",
+    "총", "합계", "평균", "몇", "상위", "순으로", "순서", "비싼",
 ]
+# 부분 문자열 매칭이 위험한 어휘는 정규식으로 다룬다.
+# "얼마"는 금액을 묻는 신호지만, 정도부사 "얼마나"(얼마나 자주/얼마나 걸려)에도 그대로 걸려
+# 문서 질문을 NL2SQL로 잘못 보낸다 (감사 실측: 오분류 5건 중 3건이 이 원인).
+SQL_MEASURE_PATTERNS = [re.compile(r"얼마(?!나)")]
 SQL_MEASURE_WEIGHT = 3
 # 정형 테이블에만 존재하는 개념 (문서·그래프에는 없음)
-SQL_TABLE_ONLY = ["티켓", "계약", "분기", "카테고리", "우선순위", "활성", "등록된", "미해결"]
+SQL_TABLE_ONLY = ["티켓", "계약", "분기", "카테고리", "우선순위", "활성", "등록된", "미해결", "규모"]
 SQL_TABLE_WEIGHT = 2
 # 1위를 묻는 표현 — 집계 성격이지만 관계 질문에도 자주 붙으므로 약한 신호
 SQL_WEAK = ["가장", "많은", "높은"]
@@ -96,6 +100,7 @@ def score_tools(question: str) -> dict:
 
     sql = (
         _score(question, SQL_MEASURE, SQL_MEASURE_WEIGHT)
+        + sum(SQL_MEASURE_WEIGHT for p in SQL_MEASURE_PATTERNS if p.search(question))
         + _score(question, SQL_TABLE_ONLY, SQL_TABLE_WEIGHT)
         + _score(question, SQL_WEAK, SQL_WEAK_WEIGHT)
     )

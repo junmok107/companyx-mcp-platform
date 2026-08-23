@@ -18,8 +18,14 @@ def _step(g, node_ids, relation, direction):
 
 
 def describe_nodes(g, node_ids) -> list[dict]:
+    """탐색 결과를 노드 id 순으로 정렬해 반환한다.
+
+    _step()이 집합을 반환하므로 정렬하지 않으면 파이썬 해시 랜덤화 때문에 같은 질문이
+    프로세스마다 다른 순서로 답변된다(실측: 동일 질의 3회 실행에서 10명의 순서가 매번 상이).
+    내용은 같지만 재현이 불가능해지고 사용자에게는 불안정해 보이므로 순서를 고정한다.
+    """
     described = []
-    for node_id in node_ids:
+    for node_id in sorted(node_ids):
         data = dict(g.nodes[node_id])
         data["id"] = node_id
         described.append(data)

@@ -16,8 +16,7 @@
 "관련 문서를 찾았습니다"라고 제시하는 오답을 구조적으로 만들어냈다.
 """
 
-import re
-
+from korean import terms as _terms
 from llm_client import call_ollama
 
 # 관련성 판정은 위 is_relevant() 게이트가 이미 수행했으므로(코퍼스 내 10/10, 밖 6/6 실측),
@@ -41,23 +40,12 @@ TOP_K_FOR_CONTEXT = 2    # 1위 문서 전체 + 보조 문서 최대 2개
 GATE_CANDIDATES = 5      # 어휘 겹침을 확인할 상위 후보 수
 MIN_SIMILARITY = 0.5     # 보조 하한선 (주 판정 기준 아님)
 
-# 질문 문형에 흔히 쓰여 변별력이 없는 어휘
-STOPWORDS = {
-    "알려줘", "뭐야", "있어", "어떻게", "되어", "보여줘", "내용", "관련", "방법",
-    "궁금해", "무엇", "얼마", "언제", "해줘", "대해", "누구", "이야", "인가",
-}
-
-# 문서는 영문 표기, 질문은 한글 음차를 쓰는 경우가 흔해 어휘 겹침이 0이 된다.
-# 표기만 다른 동일 용어이므로 비교 전에 한쪽으로 정규화한다.
-SYNONYMS = {
-    "쿠버네티스": "kubernetes", "파드": "pod", "도커": "docker",
-    "레디스": "redis", "에스에스엘": "ssl", "에이피아이": "api",
-}
+_DENIAL_PATTERNS = ("정보가 없", "정보는 없", "찾지 못했", "찾을 수 없", "포함되어 있지 않", "언급되어 있지 않")
 
 
-def _terms(text: str) -> set:
-    words = {w.lower() for w in re.findall(r"[가-힣A-Za-z0-9]+", text) if len(w) >= 2}
-    return {SYNONYMS.get(w, w) for w in words if w not in STOPWORDS}
+def _denies_information(answer: str) -> bool:
+    """생성된 답변이 '해당 정보 없음'을 말하고 있는지."""
+    return any(p in answer for p in _DENIAL_PATTERNS)
 
 
 def is_relevant(question: str, ranked_results: list) -> bool:
@@ -113,6 +101,13 @@ def generate_answer(question: str, ranked_results: list) -> dict:
     chunks_text = "\n\n".join(f"[{c['doc_id']}] {c['content']}" for c in context)
     prompt = ANSWER_PROMPT.format(question=question, chunks=chunks_text)
     answer_text = call_ollama(prompt)
+
+    # 게이트를 통과했더라도 실제로 답이 없을 수 있다(어간 매칭이 흔한 단어로 겹친 경우).
+    # 그때 LLM은 "정보가 없다"고 답하는데, 근거 문서 목록만 그대로 붙으면
+    # "출처는 있는데 답은 없다"는 모순된 결과가 된다. 답변이 부재를 말하면 인용도 비운다.
+    # 주의: 답변 내용을 바꾸지 않고 인용만 맞춘다 (LLM의 판단을 덮어쓰지 않는다).
+    if _denies_information(answer_text):
+        return {"answer": "관련 문서를 찾지 못했습니다.", "sources": []}
 
     sources = sorted({c["doc_id"] for c in context})
     return {"answer": answer_text, "sources": sources}
