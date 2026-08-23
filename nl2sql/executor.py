@@ -93,7 +93,12 @@ def validate_select_only(sql: str) -> str:
 
 
 def run_select(sql: str, row_limit: int = ROW_LIMIT_DEFAULT) -> dict:
-    """검증을 통과한 SELECT 쿼리를 읽기 전용 트랜잭션으로 실행한다."""
+    """검증을 통과한 SELECT 쿼리를 읽기 전용 트랜잭션으로 실행한다.
+
+    반환값의 total_count는 상한과 무관한 실제 행 수다. 상한에 걸렸는데 가져온 행 수만
+    보고하면 "총 200건"처럼 사실과 다른 총계를 단언하게 된다
+    (실측: sales 500행 질의가 200건이라고 답했다). truncated가 True면 표시가 잘렸다는 뜻이다.
+    """
     query = validate_select_only(sql)
 
     with psycopg.connect(DB_DSN) as conn:
@@ -104,9 +109,25 @@ def run_select(sql: str, row_limit: int = ROW_LIMIT_DEFAULT) -> dict:
             cur.execute(query)
             columns = [d.name for d in cur.description]
             rows = cur.fetchmany(row_limit)
+
+            total = len(rows)
+            truncated = len(rows) == row_limit
+            if truncated:
+                # 상한에 걸렸을 때만 실제 총계를 따로 센다 (평소에는 추가 비용 없음)
+                try:
+                    cur.execute(f"SELECT count(*) FROM ({query}) AS __total")
+                    total = cur.fetchone()[0]
+                except Exception:
+                    total = None  # 총계를 못 구하면 '알 수 없음'으로 두고 답변에서 그렇게 밝힌다
         conn.rollback()
 
-    return {"columns": columns, "rows": rows, "row_count": len(rows)}
+    return {
+        "columns": columns,
+        "rows": rows,
+        "row_count": len(rows),
+        "total_count": total,
+        "truncated": truncated,
+    }
 
 
 if __name__ == "__main__":

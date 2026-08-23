@@ -31,13 +31,22 @@ def _format_row(columns: list, row: tuple) -> str:
     return ", ".join(f"{c}={v}" for c, v in zip(columns, row))
 
 
-def render_rows(columns: list, rows: list) -> str:
-    """조회 결과를 누락 없이 결정론적으로 문자열로 만든다."""
+def render_rows(columns: list, rows: list, total: int | None = None, truncated: bool = False) -> str:
+    """조회 결과를 누락 없이 결정론적으로 문자열로 만든다.
+
+    total은 실행기가 알려준 실제 총 행 수다. 표시 상한이나 조회 상한에 걸렸다면
+    가져온 행 수가 아니라 실제 총계를 밝히고, 몇 건만 보여주는지 명시한다.
+    """
     shown = rows[:MAX_DISPLAY_ROWS]
     lines = [f"- {_format_row(columns, r)}" for r in shown]
-    header = f"총 {len(rows)}건:"
-    if len(rows) > MAX_DISPLAY_ROWS:
-        lines.append(f"- ... 외 {len(rows) - MAX_DISPLAY_ROWS}건")
+
+    if total is None:
+        header = f"조회된 결과가 많아 총 건수를 확인하지 못했습니다. 아래 {len(shown)}건만 표시합니다:"
+    elif total > len(shown):
+        note = " (조회 상한에 걸려 일부만 가져옴)" if truncated else ""
+        header = f"총 {total}건 중 {len(shown)}건 표시{note}:"
+    else:
+        header = f"총 {total}건:"
     return header + "\n" + "\n".join(lines)
 
 
@@ -55,7 +64,8 @@ def generate_answer(question: str, query_result: dict) -> str:
         prompt = ANSWER_PROMPT.format(question=question, columns=columns, rows=_format_row(columns, rows[0]))
         return call_ollama(prompt)
 
-    return render_rows(columns, rows)
+    return render_rows(columns, rows, query_result.get("total_count", len(rows)),
+                       query_result.get("truncated", False))
 
 
 if __name__ == "__main__":

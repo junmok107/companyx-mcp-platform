@@ -35,7 +35,7 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 | position | VARCHAR(50) | 직급 | 사원, 대리, 과장, 차장, 부장, 이사 |
 | dept_id | INTEGER FK→departments.id | 소속 부서 | 1~6 |
 | hire_date | DATE | 입사일 | |
-| salary | INTEGER | 연봉(단위: 만원 추정) | 3736~9520 범위 |
+| salary | INTEGER | 연봉 — **만원 단위** (3736 = 3,736만원 = 37,360,000원) | 3736~9520 |
 | is_active | BOOLEAN | 재직 여부 | 기본 TRUE |
 
 **주의**: "~팀장", "~부서장" 질문은 `departments.head_id`를 조인해야 함. "직급"과 "부서"는 서로 다른 컬럼(position vs dept_id)이므로 혼동하지 않을 것.
@@ -62,7 +62,7 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 | name | VARCHAR(100) | 제품명 | Product-C1~C4(cloud), Product-S1~S3(security), Product-D1~D3(data), Product-T1~T2(consulting) |
 | category | VARCHAR(50) | 카테고리 | cloud, security, data, consulting |
 | description | TEXT | 설명 | |
-| price_monthly | INTEGER | 월 가격 | |
+| price_monthly | INTEGER | 월 가격 — **만원 단위** | 80~500 |
 | version | VARCHAR(20) | 버전 | 예: 2.3.7 |
 | release_date | DATE | 출시일 | |
 | status | VARCHAR(20) | 상태 | active, beta |
@@ -78,7 +78,7 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 | product_id | INTEGER FK→products.id | 제품 | |
 | manager_id | INTEGER FK→employees.id | 담당 영업/매니저 | |
 | contract_type | VARCHAR(20) | 계약 유형 | subscription, project, maintenance |
-| amount | INTEGER | 계약 금액 | |
+| amount | INTEGER | 계약 금액 — **만원 단위** | 480~11000 |
 | start_date | DATE | 시작일 | |
 | end_date | DATE | 종료일 | nullable |
 | status | VARCHAR(20) | 상태 | active, completed, cancelled |
@@ -95,7 +95,7 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 | status | VARCHAR(20) | 상태 | planning, in_progress, on_hold, completed |
 | start_date | DATE | 시작일 | |
 | end_date | DATE | 종료일 | nullable |
-| budget | INTEGER | 예산 | |
+| budget | INTEGER | 예산 — **만원 단위** | 898~14738 |
 | description | TEXT | 설명 | |
 
 ## 7. sales (매출) — 500행
@@ -106,7 +106,7 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 | contract_id | INTEGER FK→contracts.id | 연결 계약 | |
 | client_id | INTEGER FK→clients.id | 고객사 | |
 | product_id | INTEGER FK→products.id | 제품 | |
-| amount | INTEGER | 매출액 | |
+| amount | INTEGER | 매출액 — **만원 단위** | 65~2078 |
 | sale_date | DATE | 매출일 | |
 | quarter | VARCHAR(10) | 분기 | '2024-Q1' ~ '2026-Q2' 형식 |
 | category | VARCHAR(50) | 카테고리(제품과 동일 체계) | cloud, security, data, consulting |
@@ -137,7 +137,23 @@ contracts 1─1 projects (projects.contract_id → contracts.id, nullable)
 
 ---
 
+## 금액 단위 — 반드시 확인할 것
+
+**모든 금액 컬럼(salary, price_monthly, amount, budget)은 만원 단위 정수다.**
+질문에 원 단위 금액이 나오면 10,000으로 나눠서 비교해야 한다.
+
+| 질문 표현 | 올바른 조건 | 틀린 조건 |
+|---|---|---|
+| 연봉 1억 이상 | `salary >= 10000` | `salary >= 100000000` |
+| 연봉 100만원 미만 | `salary < 100` | `salary < 1000000` |
+| 계약 금액 5천만원 초과 | `amount > 5000` | `amount > 50000000` |
+
 ## 자주 틀리는 포인트 체크리스트
+
+- [ ] 금액 조건을 만원 단위로 변환했는가 (위 표 참고)
+- [ ] 프로젝트와 고객사를 연결할 때 `projects.client_id`를 직접 썼는가.
+      `projects.contract_id`를 거쳐 `contracts.client_id`로 가는 경로도 존재하지만
+      결과 집합이 달라진다. 질문이 계약을 명시하지 않았다면 `projects.client_id`를 쓴다.
 
 - [ ] "보안", "클라우드" 등 한글 카테고리 표현 → `category` 컬럼의 영문 값(security/cloud/data/consulting)으로 정확히 매핑했는가
 - [ ] "지역"(서울/경기 등) 질문 시 `clients.region`인지 `sales.region`인지 질문 맥락에 맞게 선택했는가

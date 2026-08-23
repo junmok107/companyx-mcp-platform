@@ -27,6 +27,9 @@ RULES = """\
 8. "가장 많은/가장 높은/가장 큰" 처럼 1위를 묻는 질문은 ORDER BY ... LIMIT 1 대신
    RANK() OVER (ORDER BY ...) 를 써서 공동 1위를 모두 반환한다. LIMIT 1을 쓰면 동점자가
    있을 때 임의로 한 건만 남아 나머지가 사라진다. (상위 N개를 명시적으로 요구한 질문은 LIMIT N을 써도 된다.)
+9. "공동 1위", "동점", "1위인 것을 모두"처럼 동점자를 묻는 질문에서 "모두"는
+   "전체 목록"이 아니라 "1위인 것 전부"라는 뜻이다. 반드시 RANK()로 1위만 걸러낸다.
+   정렬만 하고 전체를 반환하면 안 된다.
 """
 
 FEW_SHOT_EXAMPLES = [
@@ -64,6 +67,28 @@ FEW_SHOT_EXAMPLES = [
             "SELECT e.name, e.salary FROM employees e "
             "JOIN departments d ON e.dept_id = d.id "
             "WHERE d.name = '영업팀';"
+        ),
+    },
+    {
+        # 3개 테이블을 거쳐 부서로 필터링하는 패턴 — 부서 id를 추측하지 말고 name으로 조인한다 (규칙 7).
+        # 감사 실측: 이 형태에서 모델이 dept_id = 5 처럼 잘못된 id를 하드코딩해 0건을 반환했다.
+        "question": "보안솔루션팀 직원이 담당하는 계약의 고객사를 알려줘",
+        "sql": (
+            "SELECT DISTINCT cl.name FROM contracts ct "
+            "JOIN employees e ON ct.manager_id = e.id "
+            "JOIN departments d ON e.dept_id = d.id "
+            "JOIN clients cl ON ct.client_id = cl.id "
+            "WHERE d.name = '보안솔루션팀';"
+        ),
+    },
+    {
+        # 그룹별 개수로 순위를 매기는 패턴 — COUNT는 GROUP BY와 함께 쓴다.
+        # 감사 실측: GROUP BY 없이 ORDER BY COUNT(...)를 써서 실행 오류가 났다.
+        "question": "부서별 직원 수를 많은 순으로 보여줘",
+        "sql": (
+            "SELECT d.name, COUNT(*) AS employee_count "
+            "FROM departments d JOIN employees e ON e.dept_id = d.id "
+            "GROUP BY d.name ORDER BY employee_count DESC;"
         ),
     },
     {

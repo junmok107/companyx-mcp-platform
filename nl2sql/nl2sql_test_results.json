@@ -3,18 +3,18 @@
     "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
     "hint": "sales + clients 조인, region='서울', GROUP BY, ORDER BY DESC LIMIT 5",
     "sql": "SELECT c.name, SUM(s.amount) AS total_sales FROM sales s JOIN clients c ON s.client_id = c.id WHERE c.region = '서울' GROUP BY c.name ORDER BY total_sales DESC LIMIT 5;",
-    "answer": "서울 지역에서 매출이 높은 순으로 Client-Q, Client-Y, Client-I, Client-A 입니다."
+    "answer": "총 4건:\n- name=Client-Q, total_sales=23244\n- name=Client-Y, total_sales=22865\n- name=Client-I, total_sales=10898\n- name=Client-A, total_sales=10707"
   },
   {
     "question": "2025년 3분기 총 매출액은 얼마야?",
     "hint": "sales WHERE quarter='2025-Q3', SUM(amount)",
-    "sql": "SELECT SUM(amount) AS total_sales FROM sales WHERE quarter = '2025-Q3'",
-    "answer": "2025년 3분기 총 매출액은 23859 입니다."
+    "sql": "SELECT SUM(amount) AS total_amount FROM sales WHERE quarter = '2025-Q3';",
+    "answer": "2025년 3분기 총 매출액은 23,859 입니다."
   },
   {
     "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
     "hint": "sales WHERE category='security', AVG(amount)",
-    "sql": "SELECT AVG(s.amount) AS avg_monthly_revenue FROM sales s JOIN products p ON s.product_id = p.id WHERE p.category = 'security'",
+    "sql": "SELECT AVG(s.amount) AS avg_monthly_revenue FROM sales s JOIN products p ON s.product_id = p.id WHERE p.category = 'security';",
     "answer": "보안 솔루션 카테고리 제품들의 월 평균 매출은 589.97원입니다."
   },
   {
@@ -27,25 +27,25 @@
     "question": "기술지원팀 직원 목록과 연봉을 알려줘",
     "hint": "employees JOIN departments WHERE name='기술지원팀'",
     "sql": "SELECT e.name, e.salary FROM employees e JOIN departments d ON e.dept_id = d.id WHERE d.name = '기술지원팀';",
-    "answer": "기술지원팀 직원은 박소연, 권승호, 조예진, 임우진이며, 각자의 연봉은 9520, 5378, 5019, 7092원입니다."
+    "answer": "총 4건:\n- name=박소연, salary=9520\n- name=권승호, salary=5378\n- name=조예진, salary=5019\n- name=임우진, salary=7092"
   },
   {
     "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
     "hint": "projects JOIN clients, GROUP BY client_id, ORDER BY COUNT DESC LIMIT 1",
-    "sql": "SELECT c.name, COUNT(p.id) AS project_count FROM clients c JOIN projects p ON c.id = p.client_id GROUP BY c.name ORDER BY project_count DESC LIMIT 1;",
-    "answer": "가장 많은 프로젝트를 진행 중인 고객사는 Client-AC입니다."
+    "sql": "SELECT c.name, COUNT(p.id) AS project_count FROM clients c JOIN projects p ON c.id = p.client_id WHERE p.status = 'in_progress' GROUP BY c.name ORDER BY project_count DESC LIMIT 1;",
+    "answer": "총 2건:\n- name=Client-AC, project_count=3\n- name=Client-J, project_count=3"
   },
   {
     "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
     "hint": "support_tickets WHERE priority='critical' AND status IN ('open','in_progress')",
-    "sql": "SELECT id, title, status, created_at FROM support_tickets WHERE priority = 'critical' AND status IN ('open', 'in_progress')",
-    "answer": "'디스크 용량 부족 경고' 티켓이 있습니다."
+    "sql": "SELECT id, title, status, created_at FROM support_tickets WHERE priority = 'critical' AND status IN ('open', 'in_progress');",
+    "answer": "총 5건:\n- id=37, title=프로덕션 핫픽스 요청, status=in_progress, created_at=2026-03-20 16:08:23\n- id=62, title=SSL 인증서 만료 알림, status=in_progress, created_at=2025-05-06 17:23:07\n- id=64, title=디스크 용량 부족 경고, status=open, created_at=2025-04-15 11:32:44\n- id=66, title=ETL 작업 실패, status=in_progress, created_at=2026-05-31 08:06:13\n- id=80, title=로그 수집 중단, status=in_progress, created_at=2025-06-11 09:39:12"
   },
   {
     "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
     "hint": "contracts JOIN products, GROUP BY product_id, SUM(amount) ORDER BY DESC",
     "sql": "SELECT p.name, SUM(c.amount) AS total_contract_amount FROM products p JOIN contracts c ON p.id = c.product_id GROUP BY p.name ORDER BY total_contract_amount DESC;",
-    "answer": "- Product-D3: 36500\n- Product-C1: 34300\n- Product-S1: 30800\n- Product-D1: 25200\n- Product-S2: 24000\n- Product-S3: 15360\n- Product-C4: 15000\n- Product-C2: 11700\n- Product-D2: 10800\n- Product-C3: 8400\n- Product-T2: 3800\n- Product-T1: 2720"
+    "answer": "총 12건:\n- name=Product-D3, total_contract_amount=36500\n- name=Product-C1, total_contract_amount=34300\n- name=Product-S1, total_contract_amount=30800\n- name=Product-D1, total_contract_amount=25200\n- name=Product-S2, total_contract_amount=24000\n- name=Product-S3, total_contract_amount=15360\n- name=Product-C4, total_contract_amount=15000\n- name=Product-C2, total_contract_amount=11700\n- name=Product-D2, total_contract_amount=10800\n- name=Product-C3, total_contract_amount=8400\n- name=Product-T2, total_contract_amount=3800\n- name=Product-T1, total_contract_amount=2720"
   },
   {
     "question": "2024년에 등록된 고객사는 몇 개야?",
@@ -56,7 +56,7 @@
   {
     "question": "평균 연봉이 가장 높은 부서는 어디야?",
     "hint": "employees JOIN departments, GROUP BY dept_id, AVG(salary) ORDER BY DESC LIMIT 1",
-    "sql": "SELECT d.name, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.dept_id = d.id GROUP BY d.name ORDER BY avg_salary DESC LIMIT 1;",
+    "sql": "SELECT d.name FROM departments d JOIN employees e ON d.id = e.dept_id GROUP BY d.name ORDER BY AVG(e.salary) DESC LIMIT 1;",
     "answer": "평균 연봉이 가장 높은 부서는 기술지원팀입니다."
   }
 ]
