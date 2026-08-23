@@ -29,17 +29,30 @@ FORBIDDEN_KEYWORDS = [
 
 # 시스템 카탈로그/관리 함수 접근 차단.
 # pg_ 접두사만 막으면 information_schema와 접두사 없는 서버 정보 함수로 우회된다
-# (감사 실측: information_schema.tables로 스키마 193행 열거, version()으로
-#  "PostgreSQL 14.24 Ubuntu" 노출, current_user로 접속 계정 노출 — 조회 전용 role로도
-#  이들은 기본 허용이라 DB 권한만으로는 막히지 않는다).
+# (실측: information_schema.tables로 스키마 열거, version()으로 서버 빌드 노출,
+#  current_user로 계정 노출. 보안 레드팀에서 user/current_catalog/has_*_privilege
+#  같은 별칭·정보 함수로 재우회되는 것도 확인 — 조회 전용 role에도 기본 허용이라
+#  DB 권한만으로는 막히지 않는다).
+# 주의: user/current_role 등은 컬럼명으로도 흔히 쓰이므로, 함수/특수 키워드로
+# 해석되는 문맥(단어 경계 + 뒤에 컬럼 참조가 아닌 형태)만 잡도록 신중히 구성한다.
 SYSTEM_OBJECT_PATTERN = re.compile(
     r"\bpg_[a-z_]+"
     r"|\binformation_schema\b"
-    r"|\bcurrent_(?:user|schema|schemas|database|setting|catalog|query)\b"
+    r"|\bcurrent_(?:user|role|schema|schemas|database|setting|catalog|query)\b"
     r"|\bsession_user\b"
+    r"|\bhas_[a-z_]+_privilege\b"
+    r"|\b(?:row_security_active|to_regclass|to_regrole|to_regnamespace)\b"
     r"|\bversion\s*\("
+    r"|\btxid_[a-z_]+\s*\("
     r"|\binet_(?:server|client)_(?:addr|port)\b"
     r"|\blo_(?:import|export)\b",
+    re.IGNORECASE,
+)
+
+# SQL 표준 니라리(niladic) 함수 — 괄호 없이 쓰이는 특수 키워드. 컬럼명 user와 구별하기 위해
+# SELECT 목록이나 연산 위치에 단독으로 온 경우만 차단한다 (FROM/WHERE의 컬럼 참조는 제외).
+BARE_IDENT_FUNCS = re.compile(
+    r"(?:^|[\s,(])(?:user|current_catalog)(?=\s*(?:,|$|\)|\bAS\b|::|\bUNION\b))",
     re.IGNORECASE,
 )
 
@@ -84,6 +97,10 @@ def validate_select_only(sql: str) -> str:
     found_system = SYSTEM_OBJECT_PATTERN.search(masked)
     if found_system:
         raise UnsafeQueryError(f"시스템 카탈로그/관리 함수 접근은 허용되지 않습니다: {found_system.group(0)}")
+
+    found_bare = BARE_IDENT_FUNCS.search(masked)
+    if found_bare:
+        raise UnsafeQueryError(f"시스템 정보 함수 접근은 허용되지 않습니다: {found_bare.group(0).strip(', ()')}")
 
     for kw in FORBIDDEN_KEYWORDS:
         if re.search(rf"\b{kw}\b", masked, re.IGNORECASE):
@@ -161,6 +178,17 @@ if __name__ == "__main__":
         ("SELECT current_setting('data_directory')", False),
         ("SELECT inet_server_addr()", False),
         ("SELECT lo_import('/etc/hostname')", False),
+        # 보안 레드팀에서 검증기를 우회했던 정보 함수들 (회귀 방지)
+        ("SELECT user", False),
+        ("SELECT user, name FROM clients", False),
+        ("SELECT current_catalog", False),
+        ("SELECT current_role", False),
+        ("SELECT txid_current()", False),
+        ("SELECT has_table_privilege('postgres','clients','SELECT')", False),
+        ("SELECT to_regclass('pg_authid')", False),
+        # user/current 가 컬럼명·문자열로 쓰인 정상 쿼리는 통과해야 함 (오탐 방지)
+        ("SELECT count(*) FROM users_table WHERE active = true", True),
+        ("SELECT name FROM clients WHERE name = 'super_user'", True),
         # 위 차단이 정상 쿼리를 막지 않는지 (오탐 방지)
         ("SELECT name, CASE WHEN region = '서울' THEN 1 ELSE 0 END FROM clients", True),
         ("SELECT CAST(id AS TEXT) FROM clients", True),
