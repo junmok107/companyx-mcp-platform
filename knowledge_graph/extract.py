@@ -30,6 +30,13 @@ RULES = """\
    {"mode": "aggregate", "relation": "<관계명>", "group_by": "source|target", "order": "desc|asc", "limit": <숫자>}
    - group_by는 카운트를 어느 쪽 노드 기준으로 묶을지: 관계의 source 쪽 노드별로 세면 "source", target 쪽 노드별로 세면 "target".
 
+4. unsupported: 질문이 요구하는 관계가 아래 그래프 스키마에 존재하지 않는 경우.
+   {"mode": "unsupported", "reason": "<어떤 관계가 없는지>"}
+   그래프에 있는 관계는 BELONGS_TO, HEAD_IS, USES, MANAGES_ACCOUNT, HAS_PROJECT, LEADS, REPORTED_ISSUE
+   뿐이다. "경쟁 제품", "CEO", "유사 제품", "상위 조직"처럼 이 목록에 없는 관계를 물으면
+   억지로 USES/HAS_PROJECT 등으로 바꾸지 말고 반드시 unsupported로 답한다.
+   (실측: "Product-C1의 경쟁 제품은?"에 USES 왕복 2홉을 만들어 전체 제품을 반환하는 환각이 발생했다.)
+
 출력은 JSON 객체 하나만 반환한다. 설명이나 마크다운 코드펜스를 포함하지 않는다.
 
 주의: "X부/X팀 소속 직원", "X부서 소속" 같은 질문은 employee 노드에 부서명을 속성으로 갖고 있지 않다.
@@ -46,6 +53,12 @@ FEW_SHOT_EXAMPLES = [
     {
         "question": "Product-S2를 사용하는 고객사 목록은?",
         "spec": {"mode": "traverse", "entity": "Product-S2", "hops": [{"relation": "USES", "direction": "incoming"}]},
+    },
+    {
+        # REPORTED_ISSUE는 client->product 방향. 제품을 기준으로 이슈 낸 고객을 찾으려면 incoming.
+        # (실측: 제품 기준 질문에서 outgoing으로 잘못 생성해 0건이 나오는 불안정성이 있었다.)
+        "question": "Product-S3에 이슈를 제기한 고객사는?",
+        "spec": {"mode": "traverse", "entity": "Product-S3", "hops": [{"relation": "REPORTED_ISSUE", "direction": "incoming"}]},
     },
     {
         "question": "데이터플랫폼팀에 속한 직원은 누구야?",
@@ -82,6 +95,14 @@ FEW_SHOT_EXAMPLES = [
     {
         "question": "보안솔루션팀 팀장은 누구야?",
         "spec": {"mode": "traverse", "entity": "보안솔루션팀", "hops": [{"relation": "HEAD_IS", "direction": "outgoing"}]},
+    },
+    {
+        "question": "Product-C1의 경쟁 제품은?",
+        "spec": {"mode": "unsupported", "reason": "제품 간 '경쟁' 관계는 그래프에 없음"},
+    },
+    {
+        "question": "Client-A의 CEO는 누구야?",
+        "spec": {"mode": "unsupported", "reason": "고객사의 'CEO' 관계는 그래프에 없음"},
     },
 ]
 

@@ -1,5 +1,23 @@
 """extract.py가 만든 스펙(JSON)을 받아 실제로 그래프를 순회한다."""
 
+# 그래프에 실제로 존재하는 관계. 스펙이 이 목록 밖의 관계를 요구하면 순회하지 않고 거부한다
+# (실측: "경쟁 제품" 질문에 USES 왕복 2홉을 만들어 전체 제품을 반환하는 환각이 있었다).
+VALID_RELATIONS = {
+    "BELONGS_TO", "HEAD_IS", "USES", "MANAGES_ACCOUNT",
+    "HAS_PROJECT", "LEADS", "REPORTED_ISSUE",
+}
+
+
+def _validate_hops(spec: dict) -> str | None:
+    """스펙의 관계가 모두 유효한지 검사. 문제가 있으면 오류 메시지, 없으면 None."""
+    rels = [h.get("relation") for h in spec.get("hops", [])]
+    if spec.get("mode") == "aggregate":
+        rels.append(spec.get("relation"))
+    for r in rels:
+        if r not in VALID_RELATIONS:
+            return f"'{r}'는 그래프에 없는 관계입니다."
+    return None
+
 
 def _step(g, node_ids, relation, direction):
     result = set()
@@ -96,6 +114,15 @@ def run_aggregate(g, spec: dict) -> dict:
 
 def execute(g, spec: dict, name_index: dict) -> dict:
     mode = spec.get("mode")
+    if mode == "unsupported":
+        reason = spec.get("reason", "그래프에 없는 관계입니다")
+        return {"error": f"이 질문은 지식 그래프로 답할 수 없습니다: {reason}", "nodes": []}
+
+    # 관계 환각 방어: 스펙이 스키마에 없는 관계를 요구하면 순회하지 않는다.
+    invalid = _validate_hops(spec)
+    if invalid:
+        return {"error": f"이 질문은 지식 그래프로 답할 수 없습니다: {invalid}", "nodes": []}
+
     if mode == "traverse":
         return run_traverse(g, spec, name_index)
     if mode == "filtered_traverse":
