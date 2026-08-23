@@ -1,0 +1,56 @@
+<svg width="680" height="440" viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', 'Malgun Gothic', sans-serif">
+<title>Company-X MCP 시스템 아키텍처</title>
+<desc>MCP 클라이언트가 MCP 서버를 호출하고, 서버 내부의 라우터가 NL2SQL·지식그래프·벡터검색 세 도구 중 하나를 선택하며, 세 도구는 모두 Ollama 로컬 LLM과 PostgreSQL+pgvector를 공유 백엔드로 사용하는 구조를 보여준다.</desc>
+
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<rect x="0" y="0" width="680" height="440" fill="#FFFFFF"/>
+
+<!-- MCP client -->
+<rect x="240" y="20" width="200" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+<text x="340" y="40" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#444441">MCP 클라이언트</text>
+<text x="340" y="60" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5F5E5A">Claude Desktop 등</text>
+
+<line x1="340" y1="76" x2="340" y2="108" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- MCP server container -->
+<rect x="40" y="110" width="600" height="230" rx="20" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text x="60" y="140" font-size="14" font-weight="500" fill="#26215C">MCP 서버</text>
+<text x="60" y="158" font-size="12" fill="#3C3489">companyx-mcp (stdio)</text>
+
+<!-- Router -->
+<rect x="250" y="168" width="180" height="52" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text x="340" y="186" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">라우터 (ask)</text>
+<text x="340" y="206" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">규칙 기반 도구 선택</text>
+
+<line x1="340" y1="220" x2="340" y2="248" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Three tools -->
+<rect x="60" y="250" width="170" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="145" y="270" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">NL2SQL</text>
+<text x="145" y="290" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">정형 데이터 질의</text>
+
+<rect x="250" y="250" width="170" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="335" y="270" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">지식 그래프</text>
+<text x="335" y="290" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">관계 탐색</text>
+
+<rect x="440" y="250" width="170" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="525" y="270" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">벡터 검색</text>
+<text x="525" y="290" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">문서 의미 검색</text>
+
+<line x1="215" y1="340" x2="215" y2="388" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<line x1="465" y1="340" x2="465" y2="388" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<!-- Backends -->
+<rect x="100" y="390" width="230" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="215" y="410" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#712B13">Ollama (로컬 LLM)</text>
+<text x="215" y="430" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993C1D">생성 + 임베딩 모델</text>
+
+<rect x="350" y="390" width="230" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="465" y="410" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#712B13">PostgreSQL + pgvector</text>
+<text x="465" y="430" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993C1D">구조화 데이터 + 벡터</text>
+</svg>

@@ -8,23 +8,7 @@ PostgreSQL(정형 데이터 + pgvector), 온프레미스 오픈웨이트 LLM(Oll
 
 ## 아키텍처
 
-```
-MCP 클라이언트 (Claude Desktop 등)
-        │  stdio
-        ▼
-┌─────────────────────────────────────────┐
-│  MCP 서버 (mcp_server/server.py)         │
-│  ┌───────────────┐                       │
-│  │ 라우터 (ask)   │  규칙 기반 도구 자동 선택  │
-│  └───────┬───────┘                       │
-│      ┌────┼────┬────────┐                │
-│   NL2SQL  지식그래프  벡터검색             │
-└──────┬────────┬────────┬─────────────────┘
-       │        │        │
-       ▼        ▼        ▼
-   Ollama(로컬 LLM)   PostgreSQL + pgvector
-   gemma2:9b / nomic-embed-text   (WSL, 정형 8테이블 + 벡터 저장소)
-```
+![Company-X MCP 시스템 아키텍처](docs/architecture.svg)
 
 질문 1건이 처리되는 순서: **질문 → 라우터가 키워드 점수로 도구 선택 → 선택된 도구 실행(SQL 생성/그래프 순회/문서 검색) → 필요 시 Ollama·PostgreSQL 호출 → 근거(source)와 함께 자연어 답변 반환**.
 

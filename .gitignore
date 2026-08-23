@@ -3,3 +3,9 @@
 __pycache__/
 *.pyc
 node_modules/
+~$*.doc*
+
+결과보고서.docx
+리원에이스_지정과제_정리.md
+프로젝트_기획서.docx
+핵심로직_작업계획_및_검증기준.md
