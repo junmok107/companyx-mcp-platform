@@ -1,0 +1,395 @@
+{"question": "'Product-C2'의 판매량을 시간대별로 계산해주세요.", "label": "nl2sql"}
+{"question": "Client-A와 Client-B의 매출 비율은 얼마나 될까요?", "label": "nl2sql"}
+{"question": "Client-B 매출은 얼마일까요?", "label": "nl2sql"}
+{"question": "Client-B 매출이 얼마나 되는지 알고 싶은데, 어떻게 봐야 할까?", "label": "nl2sql"}
+{"question": "Client-B와 Client-C의 계약 건수를 비교해주세요.", "label": "nl2sql"}
+{"question": "Client-B의 매출이 올해 어느 정도 왔나요?", "label": "nl2sql"}
+{"question": "Client-D가 제품 'Product-C3'을 얼마나 많이 구매했나요?", "label": "nl2sql"}
+{"question": "Client-D의 계약 현황을 알려주세요.", "label": "nl2sql"}
+{"question": "Client-D의 계약 현황을 정리해 주시겠어요?", "label": "nl2sql"}
+{"question": "Client-E와의 계약 금액이 가장 높은 프로젝트는 어디일까요?", "label": "nl2sql"}
+{"question": "Client-E의 매출액이 가장 높은 달은 언제인가요?", "label": "nl2sql"}
+{"question": "Client-F와 계약한 프로젝트 수를 말씀해주시겠어요?", "label": "nl2sql"}
+{"question": "Client-F와 매출 데이터를 비교해 보면 어떤 부분이 우수한가?", "label": "nl2sql"}
+{"question": "Client-F의 계약 건수를 알려주세요.", "label": "nl2sql"}
+{"question": "Client-F의 매출은 얼마이고, 연봉은 어느 정도?", "label": "nl2sql"}
+{"question": "Client-H와의 계약이 가장 오래된 계약은 언제인가요?", "label": "nl2sql"}
+{"question": "Product-A 판매 수량이 가장 많은 기간은 언제인가요?", "label": "nl2sql"}
+{"question": "Product-B1의 판매량이 3월에 가장 많았는데, 몇 개 판매되었는지 확인해줘.", "label": "nl2sql"}
+{"question": "Product-B의 판매 추세를 시각화해 줄 수 있나요?", "label": "nl2sql"}
+{"question": "Product-C1 판매량 최소값은 몇 개일까요?", "label": "nl2sql"}
+{"question": "Product-E1 제품과 Product-F2 제품의 판매량 비교를 해주세요.", "label": "nl2sql"}
+{"question": "각 부서별 평균 연봉을 비교해줘.", "label": "nl2sql"}
+{"question": "계약 10건 이상 진행한 부서가 몇개 있는지 알 수 있을까?", "label": "nl2sql"}
+{"question": "계약 종료일 기준 오늘 이후로 만료된 계약이 몇 건 있을까요?", "label": "nl2sql"}
+{"question": "계약 종류별 개수를 보여줘.", "label": "nl2sql"}
+{"question": "계약 중에는 어떤 조건을 놓고 있나요?", "label": "nl2sql"}
+{"question": "계약 체결 날짜가 이번 달인 계약 건수를 세어줘.", "label": "nl2sql"}
+{"question": "계약금이 가장 높은 계약은 무엇인가요?", "label": "nl2sql"}
+{"question": "고객사 리스트에서 이름이 'Client-C'인 건 몇 개 있어?", "label": "nl2sql"}
+{"question": "고객사 매출을 오름차순으로 정렬해주세요.", "label": "nl2sql"}
+{"question": "고객사 별 계약 개수를 정렬해주세요.", "label": "nl2sql"}
+{"question": "고객사들의 평균 주문 금액을 계산해주세요.", "label": "nl2sql"}
+{"question": "고객사별 계약 개수를 나와있는 데이터, 좀 볼 수 있을까요?", "label": "nl2sql"}
+{"question": "고객사별 계약 건수를 보여줘", "label": "nl2sql"}
+{"question": "고객사별 매출 데이터를 엑셀 파일로 내려받을 수 있나요?", "label": "nl2sql"}
+{"question": "과거 3년간 티켓 매출 데이터를 요약해 주세요.", "label": "nl2sql"}
+{"question": "년 3월 매출액은 얼마로 올라갔나요?", "label": "nl2sql"}
+{"question": "년 매출 성장률이 가장 높은 제품은 무엇인가요?", "label": "nl2sql"}
+{"question": "년 매출이 10억원 이상인 고객사 이름을 모두 써주세요.", "label": "nl2sql"}
+{"question": "년 이전 매출액은 얼마나 되나요?", "label": "nl2sql"}
+{"question": "년 전체 매출액의 평균값을 계산해줘", "label": "nl2sql"}
+{"question": "년 제품 A 가격으로 매출액을 계산해주세요", "label": "nl2sql"}
+{"question": "년까지 들어온 모든 계약 건수는 몇 건인가요?", "label": "nl2sql"}
+{"question": "년도 매출에 대한 상세 분석은 어떻게 볼 수 있을까?", "label": "nl2sql"}
+{"question": "담당 프로젝트가 가장 많은 직원은 누구야?", "label": "nl2sql"}
+{"question": "데이터베이스에서 제품 가격의 최저 값과 최고 값을 알려주세요.", "label": "nl2sql"}
+{"question": "매출 데이터를 분석하여 성장률을 계산해주세요.", "label": "nl2sql"}
+{"question": "매출 데이터베이스에서 올해 동안 가장 많은 매출을 올린 고객사 이름을 알려줘.", "label": "nl2sql"}
+{"question": "매출 데이터베이스에서 제품별 매출액을 분석해 봐?", "label": "nl2sql"}
+{"question": "매출 데이터베이스에서 최대 연봉을 받는 직원 정보가 있을까?", "label": "nl2sql"}
+{"question": "매출 데이터에서 최대값을 구해줘.", "label": "nl2sql"}
+{"question": "매출 분석 결과, Client-A의 매출은 어느 정도인가요?", "label": "nl2sql"}
+{"question": "매출 상위 3개 고객사를 리스트로 보여줘.", "label": "nl2sql"}
+{"question": "매출 상위 3개 제품 알려줄 수 있겠어?", "label": "nl2sql"}
+{"question": "매출이 1억원 이상인 고객사 이름을 알려줘.", "label": "nl2sql"}
+{"question": "매출이 가장 낮은 분야는 어디인가요?", "label": "nl2sql"}
+{"question": "매출이 가장 낮은 제품이 뭔지 알 수 있을까?", "label": "nl2sql"}
+{"question": "매출이 가장 높은 3개 프로젝트 이름을 알려주세요.", "label": "nl2sql"}
+{"question": "매출이 가장 높은 고객사 5곳을 보여줘", "label": "nl2sql"}
+{"question": "매출이 가장 높은 제품 이름이 뭐야?", "label": "nl2sql"}
+{"question": "매출이 가장 많은 지역은 어디일까요?", "label": "nl2sql"}
+{"question": "매출이 가장 많은 지역을 보여주세요.", "label": "nl2sql"}
+{"question": "부서별 직원 수를 최대 값부터 정렬해서 보여줘", "label": "nl2sql"}
+{"question": "부서별 직원 수를 최댓값부터 정렬해주세요.", "label": "nl2sql"}
+{"question": "부서별 직원 수를 최신 상태로 확인해줄 수 있을까요?", "label": "nl2sql"}
+{"question": "부서별 평균 연봉 순위를 알려줘", "label": "nl2sql"}
+{"question": "상급자의 연봉은 몇 만 원이야?", "label": "nl2sql"}
+{"question": "어느 상품의 재고가 가장 적은지 알려주세요.", "label": "nl2sql"}
+{"question": "영업팀 연봉 전체 합계 알려줘.", "label": "nl2sql"}
+{"question": "영업팀 직원 수를 알려주세요.", "label": "nl2sql"}
+{"question": "영업팀 직원 수를 알려줘.", "label": "nl2sql"}
+{"question": "영업팀에 가장 많은 수의 티켓이 등록된 것은 어떤 문제인가요?", "label": "nl2sql"}
+{"question": "영업팀의 직원 수가 몇 명이신가요?", "label": "nl2sql"}
+{"question": "영업팀의 평균 연봉과 다른 부서의 평균 연봉을 비교해줘.", "label": "nl2sql"}
+{"question": "영업팀의 평균 연봉은 얼마나 되나요?", "label": "nl2sql"}
+{"question": "영업팀의 평균 연봉은 얼마인가요?", "label": "nl2sql"}
+{"question": "영업팀의 평균 연봉이 몇 만원이야?", "label": "nl2sql"}
+{"question": "요즘 프로젝트 진행 상황이 어때?", "label": "nl2sql"}
+{"question": "이번 달 매출이 지난 달보다 얼마나 증가했나요?", "label": "nl2sql"}
+{"question": "이번 달 프로젝트 개수는 셈해 줘.", "label": "nl2sql"}
+{"question": "이번 달 프로젝트 티켓을 최소 수치로 줄이는 방법이 있을까?", "label": "nl2sql"}
+{"question": "이번 달 프로젝트별 티켓 개수가 몇 개인가?", "label": "nl2sql"}
+{"question": "이번달 매출액은 어떻게 되나요?", "label": "nl2sql"}
+{"question": "전반적으로 매출이 가장 좋은 시기는 언제였을까요?", "label": "nl2sql"}
+{"question": "전체 직원의 평균 연봉은 얼마인가?", "label": "nl2sql"}
+{"question": "제품 'Product-C5'의 매출이 얼마나 되나요?", "label": "nl2sql"}
+{"question": "제품 가격 최대치는 얼마일까요?", "label": "nl2sql"}
+{"question": "제품 가격 평균값은 어떻게 되나요?", "label": "nl2sql"}
+{"question": "제품 가격이 1만원 이하인 제품을 보여줘.", "label": "nl2sql"}
+{"question": "제품 가격이 가장 높은 제품을 보여줘요.", "label": "nl2sql"}
+{"question": "제품 가격이 가장 비싼 상품 3개는 뭐야?", "label": "nl2sql"}
+{"question": "제품 가격이 가장 비싼 상품 3개를 보여주시겠어요?", "label": "nl2sql"}
+{"question": "제품 가격이 가장 비싼 제품은 무엇인가?", "label": "nl2sql"}
+{"question": "제품 가격이 최저인 제품이 뭐야?", "label": "nl2sql"}
+{"question": "제품 매출이 가장 높은 월은 언제?", "label": "nl2sql"}
+{"question": "제품 팔리지 않을까봐 걱정되네요, 최근 한달 동안 매출이 가장 낮았던 상품을 알려주실 수 있나요?", "label": "nl2sql"}
+{"question": "제품-A2가 판매된 건수가 가장 많은 고객사는 누구일까요?", "label": "nl2sql"}
+{"question": "제품-C5 판매 건수가 가장 많은 고객사 3곳 알려주세요.", "label": "nl2sql"}
+{"question": "제품을 판매한 건수가 가장 많은 직원은 누구지?", "label": "nl2sql"}
+{"question": "제품의 개별 판매 수량 데이터를 알려주세요.", "label": "nl2sql"}
+{"question": "주가 변동의 최대/최소치를 보여줘요.", "label": "nl2sql"}
+{"question": "지난 6개월 동안의 매출 변화 추이를 보여주세요.", "label": "nl2sql"}
+{"question": "지난 달 판매된 제품 C5의 개수는 얼마야?", "label": "nl2sql"}
+{"question": "지난 달의 티켓 판매 건수를 알려줘.", "label": "nl2sql"}
+{"question": "지난 분기 동안 제품 C1의 판매량은 얼마나 되나요?", "label": "nl2sql"}
+{"question": "지난 해 매출 데이터는 어디에 있나요?", "label": "nl2sql"}
+{"question": "지난 해 프로젝트의 성공률을 알려주세요.", "label": "nl2sql"}
+{"question": "직원들의 나이 중 최고 나이와 최저 나이를 알려줘", "label": "nl2sql"}
+{"question": "직원들의 연봉 분포를 시각화해주세요.", "label": "nl2sql"}
+{"question": "직원의 연봉 데이터를 정렬해서 출력해 주세요.", "label": "nl2sql"}
+{"question": "직원이 속한 부서별 연봉의 최소값을 찾아줘", "label": "nl2sql"}
+{"question": "최고 매출을 기록한 고객사는 누구예요?", "label": "nl2sql"}
+{"question": "최고 연봉을 받는 직원의 부서와 이름을 알려줘.", "label": "nl2sql"}
+{"question": "최근 매출이 증가하는 제품은 무엇인가요?", "label": "nl2sql"}
+{"question": "최근 한달 동안 티켓 접수 건수가 가장 많았던 날짜는 언제일까요?", "label": "nl2sql"}
+{"question": "최대 매출을 올린 제품 이름이 뭔가요?", "label": "nl2sql"}
+{"question": "최대 연봉을 받는 직원은 누구인가요?", "label": "nl2sql"}
+{"question": "최소 연봉을 받는 직원은 누구인가요?", "label": "nl2sql"}
+{"question": "최소 주문 금액이 몇 천 원이야?", "label": "nl2sql"}
+{"question": "최저 연봉이 얼마인가요?", "label": "nl2sql"}
+{"question": "티켓 상태가 \"완료\"인 건수를 출력해줘", "label": "nl2sql"}
+{"question": "평균 월급이 가장 높은 부서가 어디인지 알려주세요.", "label": "nl2sql"}
+{"question": "프로젝트 'A'의 시작일부터 완료일까지 기간이 얼마인가요?", "label": "nl2sql"}
+{"question": "프로젝트 'B'의 성공률은 얼마나 되나요?", "label": "nl2sql"}
+{"question": "프로젝트 'Project-X'의 진행 상황을 알려주시겠어요?", "label": "nl2sql"}
+{"question": "프로젝트 이름으로 분류된 데이터 중, 최대 건수를 보여주세요", "label": "nl2sql"}
+{"question": "프로젝트별 제출된 티켓의 최대 개수를 알려줘.", "label": "nl2sql"}
+{"question": "해당 기간 동안 티켓 개수는 얼마인가요?", "label": "nl2sql"}
+{"question": "해당 부서의 총 계약 개수는 몇 건인가?", "label": "nl2sql"}
+{"question": "Client-A가 사용하는 제품 종류는 뭐야?", "label": "knowledge_graph"}
+{"question": "Client-A가 소속된 부서는 어디일까?", "label": "knowledge_graph"}
+{"question": "Client-A가 어떤 프로젝트를 리드하고 있나요?", "label": "knowledge_graph"}
+{"question": "Client-A가 제품-B1을 사용하는건 사실이야?", "label": "knowledge_graph"}
+{"question": "Client-A가 제품-C4를 사용하는지 알려줘.", "label": "knowledge_graph"}
+{"question": "Client-A와 관계된 프로젝트는 몇개나 있는데?", "label": "knowledge_graph"}
+{"question": "Client-B가 개발하는 프로젝트는 뭐라고 해?", "label": "knowledge_graph"}
+{"question": "Client-B가 관련된 프로젝트 몇 개 있지?", "label": "knowledge_graph"}
+{"question": "Client-B가 어떤 프로젝트를 리드하는지 알려줘.", "label": "knowledge_graph"}
+{"question": "Client-B가 어떤 프로젝트에 참여하고 있는지 알려줘.", "label": "knowledge_graph"}
+{"question": "Client-B가 어떤 프로젝트에 참여하고 있을까?", "label": "knowledge_graph"}
+{"question": "Client-B가 제품 사용에 어려움을 겪고 있는지 알 수 있을까?", "label": "knowledge_graph"}
+{"question": "Client-C와 관련된 모든 프로젝트 이름이 뭔가?", "label": "knowledge_graph"}
+{"question": "Client-C와 관련된 제품 정보는 뭐야?", "label": "knowledge_graph"}
+{"question": "Client-D가 사용하는 제품 3가지 알려줘.", "label": "knowledge_graph"}
+{"question": "Client-D가 사용하는 제품 목록 써줄 수 있어?", "label": "knowledge_graph"}
+{"question": "Client-D가 사용하는 제품 목록은 뭔가요?", "label": "knowledge_graph"}
+{"question": "Client-D가 사용하는 제품이 몇 개 있니?", "label": "knowledge_graph"}
+{"question": "Client-D와 관련된 프로젝트 이름을 알려줄 수 있겠니?", "label": "knowledge_graph"}
+{"question": "Client-E가 리드하는 프로젝트는 무엇인가?", "label": "knowledge_graph"}
+{"question": "Client-E가 사용하는 제품 목록을 알려줄 수 있어?", "label": "knowledge_graph"}
+{"question": "Client-E가 소속된 부서의 담당 업무는 뭔지 알려줘.", "label": "knowledge_graph"}
+{"question": "Client-E와 관련된 프로젝트는 몇 개 있을까요?", "label": "knowledge_graph"}
+{"question": "Client-E의 프로젝트를 리드하는 사람은 누구야?", "label": "knowledge_graph"}
+{"question": "Client-F가 사용하는 제품의 종류가 뭔가요?", "label": "knowledge_graph"}
+{"question": "Client-F가 어떤 부서에 소속되어 있지?", "label": "knowledge_graph"}
+{"question": "Client-F의 부서가 어떤 부분을 담당하는지 알려주세요.", "label": "knowledge_graph"}
+{"question": "Client-G가 어떤 프로젝트에 참여했을까?", "label": "knowledge_graph"}
+{"question": "Client-G가 직접 리드하는 프로젝트는 없나요?", "label": "knowledge_graph"}
+{"question": "Client-G가 프로젝트 리드 경험이 있는지 확인하고 싶어.", "label": "knowledge_graph"}
+{"question": "Client-G와 관련된 프로젝트는 어떤것인데?", "label": "knowledge_graph"}
+{"question": "Client-G와 관련된 프로젝트를 분석해 주실 수 있어요?", "label": "knowledge_graph"}
+{"question": "Client-H가 사용하는 제품 종류는 어떤 거야?", "label": "knowledge_graph"}
+{"question": "Client-H가 소속된 부서의 업무를 간략하게 설명해줘.", "label": "knowledge_graph"}
+{"question": "Client-H가 어떤 제품을 사용할 가능성이 있나요?", "label": "knowledge_graph"}
+{"question": "Client-I가 어떤 프로젝트에 참여하고 있나요?", "label": "knowledge_graph"}
+{"question": "Client-J가 소속된 부서가 어디인지 알 수 있어?", "label": "knowledge_graph"}
+{"question": "Client-K가 담당하는 프로젝트는 무엇인가?", "label": "knowledge_graph"}
+{"question": "Client-K가 어떤 부서에서 일하고 있지?", "label": "knowledge_graph"}
+{"question": "Client-M이 담당하는 프로젝트는 어떤게 있나요?", "label": "knowledge_graph"}
+{"question": "Client-Z가 소속된 부서는 어디인가?", "label": "knowledge_graph"}
+{"question": "Client-Z의 제품 사용 내역은 어떻게 확인할 수 있니?", "label": "knowledge_graph"}
+{"question": "Product-A2를 담당하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "Product-A3을 개발한 사람이 누구야?", "label": "knowledge_graph"}
+{"question": "Product-A와 관련된 프로젝트 개수는 몇개일까?", "label": "knowledge_graph"}
+{"question": "Product-B1을 개발한 사람은 누구인가?", "label": "knowledge_graph"}
+{"question": "Product-B2를 담당하는 직원 이름을 알려줘.", "label": "knowledge_graph"}
+{"question": "Product-B3를 가장 많이 사용하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "Product-B를 이용하는 고객사가 어떻게 사용하는지 알려줄 수 있을까?", "label": "knowledge_graph"}
+{"question": "Product-C1과 관련된 프로젝트는 어떤게 있니?", "label": "knowledge_graph"}
+{"question": "Product-C1을 사용하는 고객사는 누구야?", "label": "knowledge_graph"}
+{"question": "Product-C2를 제조한 직원이 어디 소속인가?", "label": "knowledge_graph"}
+{"question": "Product-C3을 담당하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "Product-C3을 사용하는 고객의 수를 알려줘.", "label": "knowledge_graph"}
+{"question": "Product-C4를 리드하는 사람은 누구지?", "label": "knowledge_graph"}
+{"question": "Product-C4를 리드하는 직원은 누구죠?", "label": "knowledge_graph"}
+{"question": "Product-C5의 제작 과정을 설명해줄 수 있겠니?", "label": "knowledge_graph"}
+{"question": "Product-D1을 사용하는 고객과 관계자들은 누구인가?", "label": "knowledge_graph"}
+{"question": "Product-D3를 리드하는 사람은 누구인가?", "label": "knowledge_graph"}
+{"question": "Product-D를 사용하는 고객사 리스트가 있을까?", "label": "knowledge_graph"}
+{"question": "Product-E1을 담당하는 직원은 누구일까요?", "label": "knowledge_graph"}
+{"question": "Product-E를 리드하는 직원이 누구일까?", "label": "knowledge_graph"}
+{"question": "Product-F2를 개발한 직원은 누구인지 알고 있어?", "label": "knowledge_graph"}
+{"question": "Product-F2를 사용하는 고객사를 알려주세요.", "label": "knowledge_graph"}
+{"question": "Product-G3에 대한 정보를 알려주시겠어요?", "label": "knowledge_graph"}
+{"question": "Product-G의 개발팀은 어디에 소속되어 있을까?", "label": "knowledge_graph"}
+{"question": "Product-H4를 담당하는 직원은 누구인가요?", "label": "knowledge_graph"}
+{"question": "Product-I5에 대한 사용자 정보가 어디서 확인 가능해요?", "label": "knowledge_graph"}
+{"question": "Product-I를 사용하는 고객사가 몇 회사일까?", "label": "knowledge_graph"}
+{"question": "가장 많은 고객을 가진 부서가 어디야?", "label": "knowledge_graph"}
+{"question": "가장 많은 프로젝트를 담당하고 있는 직원이 누구일까?", "label": "knowledge_graph"}
+{"question": "가장 많은 프로젝트를 담당하는 직원은 누구야?", "label": "knowledge_graph"}
+{"question": "가장 많은 프로젝트에 참여하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "가장 많은 프로젝트에 참여한 직원은 누구일까요?", "label": "knowledge_graph"}
+{"question": "경영지원팀 리더가 누구임을 알려줘.", "label": "knowledge_graph"}
+{"question": "경영지원팀 팀장은 누구인가요?", "label": "knowledge_graph"}
+{"question": "경영지원팀에 소속된 직원이 누구인지 알고 싶어.", "label": "knowledge_graph"}
+{"question": "경영지원팀에 속한 직원 수는 몇 명일까?", "label": "knowledge_graph"}
+{"question": "경영지원팀에 속한 직원들의 개인 정보는 어떻게 알 수 있나?", "label": "knowledge_graph"}
+{"question": "경영지원팀에서 제품 사용에 대해 협의하는 부서가 어디?", "label": "knowledge_graph"}
+{"question": "경영팀에 소속된 직원은 몇 명인가요?", "label": "knowledge_graph"}
+{"question": "고객사 별 제품 사용량 순위는 어떻게 되지?", "label": "knowledge_graph"}
+{"question": "고객사-I가 사용하는 제품 수와 Client-J의 제품 사용 수 비교 해봐.", "label": "knowledge_graph"}
+{"question": "누가 Product-B를 리드하고 있지?", "label": "knowledge_graph"}
+{"question": "누가 Product-D1을 사용하고 있을까?", "label": "knowledge_graph"}
+{"question": "매출이 가장 높은 부서는 어디?", "label": "knowledge_graph"}
+{"question": "몇 명이 제품-C1을 사용하고 있을까?", "label": "knowledge_graph"}
+{"question": "무엇을 담당하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "무엇을 리드하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "무엇을 사용하는 고객이 Client-L일까?", "label": "knowledge_graph"}
+{"question": "무엇을 제품-C2를 사용하는 사람이 있나?", "label": "knowledge_graph"}
+{"question": "부서별 직원 개수 순위를 알려줘", "label": "knowledge_graph"}
+{"question": "부서별 직원 수 순위 어때?", "label": "knowledge_graph"}
+{"question": "부서별 직원 수 순위를 알려줄 수 있어?", "label": "knowledge_graph"}
+{"question": "부서별 직원 수 순위를 알려줘.", "label": "knowledge_graph"}
+{"question": "부서별 직원 수는 어떻게 나뉘나?", "label": "knowledge_graph"}
+{"question": "부서별 직원 수를 차례로 나와줘.", "label": "knowledge_graph"}
+{"question": "부서별 프로젝트 담당자 명단을 보여줘.", "label": "knowledge_graph"}
+{"question": "부서별로 직원 수는 어떻게 되지?", "label": "knowledge_graph"}
+{"question": "부서별로 직원 수를 순위로 정렬해줘.", "label": "knowledge_graph"}
+{"question": "사내에서 가장 많은 제품을 사용하는 고객사는 어떤가요?", "label": "knowledge_graph"}
+{"question": "사무팀에서 어떤 업무를 하고 있을까?", "label": "knowledge_graph"}
+{"question": "어떤 고객사가 Product-C6을 가장 많이 사용하는가?", "label": "knowledge_graph"}
+{"question": "어떤 부서가 가장 많은 프로젝트를 진행하고 있지?", "label": "knowledge_graph"}
+{"question": "어떤 제품을 Client-E가 가장 많이 사용하는지 알고 싶어.", "label": "knowledge_graph"}
+{"question": "어떤 제품이 Client-B에서 가장 많이 사용되는가?", "label": "knowledge_graph"}
+{"question": "어떤 직원이 Client-F를 담당하고 있을까?", "label": "knowledge_graph"}
+{"question": "어떤 직원이 Product-A를 담당하고 있지?", "label": "knowledge_graph"}
+{"question": "어떤 직원이 가장 많은 프로젝트를 담당하고 있지?", "label": "knowledge_graph"}
+{"question": "어떤 프로젝트에 Client-I가 참여했을까?", "label": "knowledge_graph"}
+{"question": "영업팀 사원 중 프로젝트-F3를 리드하는 사람은 누구니?", "label": "knowledge_graph"}
+{"question": "영업팀 소속 직원 중 프로젝트-D2 담당자는 누구야?", "label": "knowledge_graph"}
+{"question": "영업팀 소속 직원들의 숫자는 몇 명이야?", "label": "knowledge_graph"}
+{"question": "영업팀 직원들이 담당하는 고객사는 누구?", "label": "knowledge_graph"}
+{"question": "영업팀 팀장 이름은 뭐야?", "label": "knowledge_graph"}
+{"question": "영업팀 팀장의 이름이 뭐죠?", "label": "knowledge_graph"}
+{"question": "영업팀 팀장이 누구야?", "label": "knowledge_graph"}
+{"question": "영업팀에 소속된 직원은 몇 명인가?", "label": "knowledge_graph"}
+{"question": "영업팀에서 가장 많은 제품을 판매한 사람은 누구야?", "label": "knowledge_graph"}
+{"question": "영업팀에서 가장 많은 프로젝트를 진행하는 직원은 누구일까?", "label": "knowledge_graph"}
+{"question": "영업팀에서 담당하는 고객사는 누구인가?", "label": "knowledge_graph"}
+{"question": "영업팀에서 몇 명이 부서장 자리에 있는지 알려줘.", "label": "knowledge_graph"}
+{"question": "영업팀에서 프로젝트 리드하는 직원은 누구일까요?", "label": "knowledge_graph"}
+{"question": "영업팀은 몇 명이 있을까?", "label": "knowledge_graph"}
+{"question": "영업팀의 담당 상품은 무엇일까?", "label": "knowledge_graph"}
+{"question": "이번 프로젝트에서 제품-E1을 사용하는 부서가 있는지 알 수 있어?", "label": "knowledge_graph"}
+{"question": "이번 프로젝트에서 직원들의 관계는 어떤가요?", "label": "knowledge_graph"}
+{"question": "전체 직원 중 프로젝트를 가장 많이 리드하는 직원은 누구지?", "label": "knowledge_graph"}
+{"question": "제품-C5를 사용하는 고객은 누구야?", "label": "knowledge_graph"}
+{"question": "직원-G1이 소속된 부서를 알고 싶어.", "label": "knowledge_graph"}
+{"question": "직원-L1이 소속된 부서와 역할을 알려줘.", "label": "knowledge_graph"}
+{"question": "최근에 시작된 프로젝트 이름을 알려줘", "label": "knowledge_graph"}
+{"question": "프로젝트-E1 담당 직원은 누구야?", "label": "knowledge_graph"}
+{"question": "프로젝트-H1에 참여하는 직원들은 누구야?", "label": "knowledge_graph"}
+{"question": "프로젝트를 리드하는 직원 중 가장 많은 프로젝트를 관리하는 사람은 누구?", "label": "knowledge_graph"}
+{"question": "Client-A 사와의 협약 내용을 제안서에서 찾아볼 수 있어요?", "label": "vector_search"}
+{"question": "Client-A 제안서 내용 요약좀 해줄 수 있어?", "label": "vector_search"}
+{"question": "Client-A 제품 설치 방법, 어떻게 해야 하나요?", "label": "vector_search"}
+{"question": "Client-A의 기술문서에 언급된 오류 코드가 뭔가 알려줄 수 있겠어?", "label": "vector_search"}
+{"question": "Client-B 최근 회의록에 어떤 내용이 담겨있었는지 알려줘.", "label": "vector_search"}
+{"question": "Client-B 회의록에서 언급된 주요 내용은 무엇이었을까요?", "label": "vector_search"}
+{"question": "Client-C 사용자 리뷰에 대한 분석 내용은 어떤 부분이 주요했나요?", "label": "vector_search"}
+{"question": "Client-D 사례에서 제안된 \"솔루션\"의 효과성은 어느 정도로 검증되었나요?", "label": "vector_search"}
+{"question": "Client-D 회의록을 참고하여 최근 프로젝트 진행 상황을 알려주실 수 있나요?", "label": "vector_search"}
+{"question": "Client-E 회사와의 협력 방안이 제안서에 어떻게 제시되어 있나요?", "label": "vector_search"}
+{"question": "Client-E와의 계약 내용은 제안서에서 어떤 부분에서 언급되었나요?", "label": "vector_search"}
+{"question": "Client-F가 제안한 새로운 기능의 장단점은 무엇인가요?", "label": "vector_search"}
+{"question": "Product-C1 사용에 대한 기술문서에서 예상되는 문제점은 무엇이라고 적혀있나요?", "label": "vector_search"}
+{"question": "Product-C1 설치 관련 기술문서에서 주요 내용은 뭐죠?", "label": "vector_search"}
+{"question": "Product-C1 설치 방법을 문서에 기재했나요?", "label": "vector_search"}
+{"question": "Product-C1의 설치 방법은 어떻게 되나요? 간단히 알려주시겠어요?", "label": "vector_search"}
+{"question": "Product-C1의 안정성 개선을 위한 기술적인 제안이 적혀있는 자료에서 뭐가 눈에 띄었나?", "label": "vector_search"}
+{"question": "Product-C1의 제품 설명서를 통해 어떤 기능들을 알 수 있나요?", "label": "vector_search"}
+{"question": "Product-C1의 주요 기능은 장애 보고서에서 어떻게 설명되어 있나요?", "label": "vector_search"}
+{"question": "Product-C2 설치 과정에서 발생할 수 있는 문제점들은 무엇인가요?", "label": "vector_search"}
+{"question": "Product-C2 설치 방법이 어떻게 되나요?", "label": "vector_search"}
+{"question": "Product-C2 장애 발생 시, 어떤 대응 방안이 제시되었나요?", "label": "vector_search"}
+{"question": "Product-C2 장애 사례에 대한 분석 내용은 어디서 확인할 수 있을까요?", "label": "vector_search"}
+{"question": "Product-C2의 설치 및 운영 방법을 기술문서에서 찾을 수 있나요?", "label": "vector_search"}
+{"question": "Product-C3의 제안 효과를 구체적으로 설명해 주세요.", "label": "vector_search"}
+{"question": "Product-F의 \"설계 개념\"에 대해 기술 문서에서 자세히 알 수 있나요?", "label": "vector_search"}
+{"question": "기술 문서를 참고하여 Product-E의 주요 기능을 간략하게 설명해 주시겠어요?", "label": "vector_search"}
+{"question": "기술 문서에 기술된 업데이트 계획 내용을 알고 싶어요.", "label": "vector_search"}
+{"question": "기술 문서에 담긴 주요 특징들을 간략하게 알려주세요.", "label": "vector_search"}
+{"question": "기술 문서에 대한 상세한 내용을 정리해서 보내주시겠어요?", "label": "vector_search"}
+{"question": "기술 문서에 따르면 Product-B의 보안 취약점은 어떻게 개선되었나요?", "label": "vector_search"}
+{"question": "기술 문서에 명시된 오류 수정 내용은 무엇인가요?", "label": "vector_search"}
+{"question": "기술 문서에 제품의 성능 지표는 어디에 나와있나요?", "label": "vector_search"}
+{"question": "기술 문서에서 \"사용자 인터페이스\"의 디자인 철학을 살펴볼 수 있나요?", "label": "vector_search"}
+{"question": "기술 문서에서 제품의 최신 버전 정보를 찾을 수 있나요?", "label": "vector_search"}
+{"question": "기술문서에 따라 오류 코드 해결 방법은 어떻게 되나요?", "label": "vector_search"}
+{"question": "기술문서에 따르면 Product-C1의 특징은 무엇인가요?", "label": "vector_search"}
+{"question": "기술문서에 따르면 제품의 기능 개선 사항은 무엇인가요?", "label": "vector_search"}
+{"question": "기술문서에서 Product-C1의 장점과 단점을 비교 분석해 주실 수 있나요?", "label": "vector_search"}
+{"question": "문서에 기술된 \"시스템 업그레이드\"의 범위는 어느 정도인가요?", "label": "vector_search"}
+{"question": "문서에 담긴 내용을 찾아보려고 하는 질문 25개입니다.", "label": "vector_search"}
+{"question": "백업 정책이 어떻게 되는지 자세히 알려주시겠어요?", "label": "vector_search"}
+{"question": "서버 장애 발생 시 대응 프로세스는 어떤지 기록해뒀나요?", "label": "vector_search"}
+{"question": "서버 장애 발생 시 대처 방법을 회의록에서 찾아볼 수 있을까?", "label": "vector_search"}
+{"question": "서버 장애 발생 시 발생하는 피해 규모는 어느 정도인가요?", "label": "vector_search"}
+{"question": "서버 장애 발생 시 정책에 따라 어떤 조치가 취해지는지 알려주세요.", "label": "vector_search"}
+{"question": "설치 방법 문서에서 언급된 문제 발생 시 대처 방안은 무엇인가요?", "label": "vector_search"}
+{"question": "설치 방법서에 대한 설명이 부족하네요, 자세히 알려주실 수 있나요?", "label": "vector_search"}
+{"question": "영업팀 제안서에 대한 의결 내용은 언제 공유될 예정인가요?", "label": "vector_search"}
+{"question": "영업팀 회의록을 통해 Client-B와의 계약 상황은 어떤지 파악해볼 수 있나요?", "label": "vector_search"}
+{"question": "영업팀에서 제시한 제안 효과는 어떤 부분인가요?", "label": "vector_search"}
+{"question": "영업팀에서 제시한 제안에 대한 회의 내용은 어떤지 알려주세요.", "label": "vector_search"}
+{"question": "영업팀의 목표 달성 전략이 회의록에 어떻게 서술되어 있나요?", "label": "vector_search"}
+{"question": "영업팀의 제안서에 대한 의견은 어떠했나요?", "label": "vector_search"}
+{"question": "영업팀이 제안서에서 주목을 끌려고 했던 부분은 무엇일까요?", "label": "vector_search"}
+{"question": "영업팀이 회의록에서 제시한 목표는 무엇인가요?", "label": "vector_search"}
+{"question": "이번 프로젝트에서 제안된 정책은 무엇인지 알려줄 수 있어요?", "label": "vector_search"}
+{"question": "장애 발생 사례에 대한 분석이 어떻게 되어있는지 알고 싶어요.", "label": "vector_search"}
+{"question": "장애 발생 시, 영업팀은 어떤 역할을 수행하나요?", "label": "vector_search"}
+{"question": "장애 보고서 내용 중 특히 중요한 부분은 무엇인가요?", "label": "vector_search"}
+{"question": "장애 보고서에 따라 \"예상되는 재발 가능성\"은 어떻게 분석되었나요?", "label": "vector_search"}
+{"question": "장애 보고서에 따르면 \"피해 규모\"는 얼마나 되나요?", "label": "vector_search"}
+{"question": "장애 보고서에 따르면, Server-D 오류 원인은 무엇인지 자세히 적혀 있나요?", "label": "vector_search"}
+{"question": "장애 보고서에서 가장 우려되는 부분은 무엇인가요?", "label": "vector_search"}
+{"question": "장애 보고서에서 기술된 문제점들을 어떻게 해결할 계획인가요?", "label": "vector_search"}
+{"question": "장애 보고서에서 언급된 대응 조치 효과는 어떠했나요?", "label": "vector_search"}
+{"question": "장애 보고서에서 언급된 응급 대처 절차는 어떠한가요?", "label": "vector_search"}
+{"question": "장애 보고서에서 언급된 해결 방안들을 정리해 줄 수 있을까요?", "label": "vector_search"}
+{"question": "장애 보고서에서 제시된 개선 방안들은 구체적으로 어떻게 적용될 수 있을까요?", "label": "vector_search"}
+{"question": "장애 원인 분석 결과가 장애보고서에 어떻게 요약되어 있나요?", "label": "vector_search"}
+{"question": "장애 원인 분석 보고서를 좀 보여주시겠어요?", "label": "vector_search"}
+{"question": "장애 원인 분석 보고서에 따르면 시스템 오류는 어떤 부분에서 발생했나요?", "label": "vector_search"}
+{"question": "장애 원인 분석 보고서에서 언급된 문제점들은?", "label": "vector_search"}
+{"question": "장애보고서에 기술된 시스템 점검 빈도는 어느 정도인가요?", "label": "vector_search"}
+{"question": "장애보고서에 기재된 문제점들의 개선 방안은 무엇이었나요?", "label": "vector_search"}
+{"question": "장애보고서에 따르면 문제 발생 빈도는 어느 정도인가요?", "label": "vector_search"}
+{"question": "장애보고서에 따르면 발생한 장애의 영향은 어느 정도였나요?", "label": "vector_search"}
+{"question": "장애보고서에 따르면 최근 가장 빈번하게 발생하는 문제 유형은 무엇일까요?", "label": "vector_search"}
+{"question": "장애보고서에 서술된 문제점 해결 방안은 무엇인가요?", "label": "vector_search"}
+{"question": "저는 제안서에 적힌 \"기대 성장률\"이 어떤 근거에 기반하여 계산되었는지 알고 싶습니다.", "label": "vector_search"}
+{"question": "제안서 내용 중 Client-Z 사와의 협력 계획은 어떻게 되나요?", "label": "vector_search"}
+{"question": "제안서 내용에서 제시된 \"지원 프로그램\"의 구체적인 효과는 어떻게 설명되어 있나요?", "label": "vector_search"}
+{"question": "제안서에 기재된 개발 계획은 어떤 부분에 중점을 두고 있나요?", "label": "vector_search"}
+{"question": "제안서에 대한 구체적인 효과 분석은 어디서 볼 수 있을까요?", "label": "vector_search"}
+{"question": "제안서에 따라 예상되는 개발 비용을 세부적으로 나누어서 알려주시겠어요?", "label": "vector_search"}
+{"question": "제안서에 따라 예상되는 성장률은 얼마나 될 것으로 보입니다?", "label": "vector_search"}
+{"question": "제안서에 명시된 예상 비용의 구성 비율은 어떻게 되나요?", "label": "vector_search"}
+{"question": "제안서에 명시된 예상 효과는 실제로 어느 정도 실현되고 있나요?", "label": "vector_search"}
+{"question": "제안서에 제시된 비즈니스 모델의 장점과 단점은 뭐였나요?", "label": "vector_search"}
+{"question": "제안서에 제시된 정책 방향은 어떤지 설명해주시겠어요?", "label": "vector_search"}
+{"question": "제안서에 포함된 예산 내역은 어떻게 구성되어 있나요?", "label": "vector_search"}
+{"question": "제안서에서 \"시장 분석 결과\"를 바탕으로 어떤 전략이 제시되었나요?", "label": "vector_search"}
+{"question": "제안서에서 Client-C의 의견은 어떤 점이 주목할 만한가요?", "label": "vector_search"}
+{"question": "제안서에서 기술된 예상 효과를 구체적으로 설명해 줄 수 있을까요?", "label": "vector_search"}
+{"question": "제안서에서 언급된 문제점들은 회의록에서도 논의되었나요?", "label": "vector_search"}
+{"question": "제안서에서 언급된 핵심 아이디어들을 간단히 정리해 줄 수 있을까요?", "label": "vector_search"}
+{"question": "제안서에서 제시된 \"기술력 강화 방안\"을 구체적으로 설명해 주세요.", "label": "vector_search"}
+{"question": "제안서에서 제시된 개발 계획을 기술 문서에 적용하는 것은 어떻게 되나요?", "label": "vector_search"}
+{"question": "제안서에서 제시된 기술적 효과는 어떤 부분인가요?", "label": "vector_search"}
+{"question": "제안서에서 제시된 마케팅 전략의 효과적인 실행 방안은 무엇인가요?", "label": "vector_search"}
+{"question": "제안서의 \"차별화 전략\"에 대한 자세한 내용을 알고 싶어요.", "label": "vector_search"}
+{"question": "제안서의 내용이 회의록에서 논의되었나요?", "label": "vector_search"}
+{"question": "제안서의 시장 분석 부분은 얼마나 구체적으로 서술되어 있나요?", "label": "vector_search"}
+{"question": "제품 제안서에 대한 회의 논의 내용이 나와있나요?", "label": "vector_search"}
+{"question": "지난 회의에서 논의되었던 백업 정책은 어떤 형태인가요?", "label": "vector_search"}
+{"question": "최근 Client-B 서버 장애 원인은 어떤 부분인지 알려줄 수 있을까요?", "label": "vector_search"}
+{"question": "최근 Client-B 센서 장애 원인이 뭔가요?", "label": "vector_search"}
+{"question": "최근 Client-B 회의록에서 논의되었던 주요 내용이 뭔지 알 수 있을까요?", "label": "vector_search"}
+{"question": "최근 Product-C1의 장애 원인이 무엇인지 알려줄 수 있어요?", "label": "vector_search"}
+{"question": "최근 발생한 Product-C3 장애의 원인을 알고 싶어.", "label": "vector_search"}
+{"question": "최근 서버 장애 사건에 대한 장애보고서 내용이 있나요?", "label": "vector_search"}
+{"question": "최근 업데이트로 변경된 기술 문서 내용은 무엇인가요?", "label": "vector_search"}
+{"question": "최근 장애 보고서에서 언급된 \"시스템 복구 시간\"은 얼마나 걸렸나요?", "label": "vector_search"}
+{"question": "최근 제품 개발 과정에서 발생한 문제점에 대한 내용을 기술문서에서 찾을 수 있을까요?", "label": "vector_search"}
+{"question": "최근 회의록에서 영업팀의 주요 제안이 뭐였는지 알 수 있어?", "label": "vector_search"}
+{"question": "회의록 내용은 어디서 확인할 수 있을까?", "label": "vector_search"}
+{"question": "회의록에 Client-C의 의견은 어떤 부분이였는지 알려줄 수 있나요?", "label": "vector_search"}
+{"question": "회의록에 담긴 \"다음 단계 계획\"은 무엇인가요?", "label": "vector_search"}
+{"question": "회의록에 대한 영업팀의 제안 내용이 좀 더 자세하게 들어있는 건가요?", "label": "vector_search"}
+{"question": "회의록에서 Client-A와 Client-C의 입장차이가 어떤 부분에서 나타났나요?", "label": "vector_search"}
+{"question": "회의록에서 논의된 기술 전략의 핵심 내용을 요약해주시겠어요?", "label": "vector_search"}
+{"question": "회의록에서 논의된 시장 분석 결과는 어떤 부분이 주요했나요?", "label": "vector_search"}
+{"question": "회의록에서 논의된 주제와 결론을 요약해 주실 수 있나요?", "label": "vector_search"}
+{"question": "회의록에서 제기된 아이디어 중 구현된 것은 무엇인가요?", "label": "vector_search"}
+{"question": "회의록에서 제기된 아이디어 중 실현 가능성이 높은 것은 무엇이라고 생각하세요?", "label": "vector_search"}
+{"question": "회의록에서 제안된 업무 프로세스 변화 내용이 뭐였을까요?", "label": "vector_search"}
+{"question": "회의록을 보면 Client-A의 의견이 어떻게 드러나는지 알 수 있나요?", "label": "vector_search"}
+{"question": "회의록을 보면 Client-E의 목표가 어떻게 드러나는지 알 수 있을까요?", "label": "vector_search"}
+{"question": "회의록을 봤는데, Client-D의 제안에 대한 반응은 어떠했는지 알고 싶어요.", "label": "vector_search"}
+{"question": "회의록을 통해 Client-G의 입장을 더 자세히 파악할 수 있나요?", "label": "vector_search"}
+{"question": "회의에서 Client-D 회사의 의견은 무엇인지 기억나시나요?", "label": "vector_search"}

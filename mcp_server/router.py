@@ -141,14 +141,42 @@ def _route_by_llm(question: str) -> str | None:
     return None
 
 
-def route(question: str, allow_llm_fallback: bool = True) -> str:
+# 증류된 학생 분류기 (router_ml). 있으면 고확신 판정에 쓰고, 없으면 조용히 건너뛴다.
+# 학생은 char n-gram + 의도 특징 기반이라 어휘가 조금 달라도 판정하며(키워드 규칙의
+# out-of-vocabulary 약점 보완), confidence가 잘 보정돼 있어(≥0.8 구간 정확도 0.97 실측)
+# 확신 없는 질문만 LLM 폴백으로 넘길 수 있다.
+STUDENT_MIN_CONFIDENCE = 0.8
+
+
+def _route_by_student(question: str):
+    try:
+        import sys
+        from pathlib import Path
+
+        rm = str(Path(__file__).resolve().parent.parent / "router_ml")
+        if rm not in sys.path:
+            sys.path.insert(0, rm)
+        from student_router import classify
+
+        return classify(question, min_confidence=STUDENT_MIN_CONFIDENCE)
+    except Exception:
+        return None, 0.0
+
+
+def route(question: str, allow_llm_fallback: bool = True, allow_student: bool = True) -> str:
     """question -> 'nl2sql' | 'knowledge_graph' | 'vector_search'
 
-    규칙 점수가 하나라도 있으면 LLM을 부르지 않고 즉시 반환한다(빠른 경로).
+    3단 구조: 규칙(0.01ms) → 학생 분류기(0.4ms) → LLM 폴백(~2.8s).
+    규칙이 신호를 내면 즉시 반환(가장 빠름). 규칙이 기권하면 학생을 쓰고,
+    학생도 확신이 없으면 LLM 폴백. 학생 모델이 없으면 기존 규칙→LLM 경로로 동작한다.
     """
     ruled = route_by_rules(question)
     if ruled is not None:
         return ruled
+    if allow_student:
+        tool, _conf = _route_by_student(question)
+        if tool is not None:
+            return tool
     if allow_llm_fallback:
         guessed = _route_by_llm(question)
         if guessed is not None:
