@@ -17,7 +17,9 @@ from llm_client import embed_document
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DOCUMENTS_DIR = PROJECT_ROOT / "documents"
-DB_DSN = os.environ.get("COMPANYX_DB_DSN", "dbname=companyx host=localhost port=5434 user=postgres")
+# 이 스크립트만 쓰기 권한이 필요하다(최초 1회 적재). 질의 경로(search.py)는 조회 전용
+# role을 쓰므로, 관리자 자격증명은 여기서만 별도 환경변수로 받는다.
+DB_DSN = os.environ.get("COMPANYX_ADMIN_DSN", "dbname=companyx host=localhost port=5434 user=postgres")
 
 
 def chunk_document(text: str) -> list[str]:

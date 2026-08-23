@@ -24,6 +24,9 @@ RULES = """\
 6. 출력은 SQL 쿼리 문자열 하나만 반환한다. 설명, 마크다운 코드펜스(```), 주석을 포함하지 않는다.
 7. 부서명/고객사명/제품명 등으로 필터링할 때는 반드시 해당 테이블과 JOIN해서 name 컬럼으로 조건을 건다.
    id를 임의로 추측해서 하드코딩하지 않는다 (예: dept_id = 6 처럼 숫자를 직접 넣지 말 것).
+8. "가장 많은/가장 높은/가장 큰" 처럼 1위를 묻는 질문은 ORDER BY ... LIMIT 1 대신
+   RANK() OVER (ORDER BY ...) 를 써서 공동 1위를 모두 반환한다. LIMIT 1을 쓰면 동점자가
+   있을 때 임의로 한 건만 남아 나머지가 사라진다. (상위 N개를 명시적으로 요구한 질문은 LIMIT N을 써도 된다.)
 """
 
 FEW_SHOT_EXAMPLES = [
@@ -61,6 +64,17 @@ FEW_SHOT_EXAMPLES = [
             "SELECT e.name, e.salary FROM employees e "
             "JOIN departments d ON e.dept_id = d.id "
             "WHERE d.name = '영업팀';"
+        ),
+    },
+    {
+        # 1위를 묻는 질문의 동점 처리 패턴 (규칙 8)
+        "question": "계약 건수가 가장 많은 고객사는?",
+        "sql": (
+            "SELECT name, contract_count FROM ("
+            "SELECT c.name, COUNT(*) AS contract_count, "
+            "RANK() OVER (ORDER BY COUNT(*) DESC) AS rk "
+            "FROM clients c JOIN contracts ct ON c.id = ct.client_id "
+            "GROUP BY c.name) ranked WHERE rk = 1;"
         ),
     },
 ]

@@ -69,7 +69,15 @@ def run_aggregate(g, spec: dict) -> dict:
         key = source if group_by == "source" else target
         counts[key] = counts.get(key, 0) + 1
 
-    ranked = sorted(counts.items(), key=lambda kv: kv[1], reverse=(order == "desc"))[:limit]
+    ordered = sorted(counts.items(), key=lambda kv: kv[1], reverse=(order == "desc"))
+    # 동점 포함: limit번째와 같은 개수인 항목은 모두 반환한다.
+    # 단순히 [:limit]로 자르면 "가장 많은 X는?"에서 공동 1위 중 하나만 임의로 남아
+    # 나머지가 조용히 사라진다 (실측: MANAGES_ACCOUNT 공동 1위 3명 중 1명만 답변됨).
+    ranked = ordered[:limit]
+    if ordered and len(ordered) > limit:
+        cutoff = ordered[limit - 1][1]
+        ranked += [kv for kv in ordered[limit:] if kv[1] == cutoff]
+
     nodes = []
     for node_id, count in ranked:
         data = dict(g.nodes[node_id])
