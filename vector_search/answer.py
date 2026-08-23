@@ -40,7 +40,10 @@ TOP_K_FOR_CONTEXT = 2    # 1위 문서 전체 + 보조 문서 최대 2개
 GATE_CANDIDATES = 5      # 어휘 겹침을 확인할 상위 후보 수
 MIN_SIMILARITY = 0.5     # 보조 하한선 (주 판정 기준 아님)
 
-_DENIAL_PATTERNS = ("정보가 없", "정보는 없", "찾지 못했", "찾을 수 없", "포함되어 있지 않", "언급되어 있지 않")
+_DENIAL_PATTERNS = (
+    "정보가 없", "정보는 없", "내용이 없", "내용은 없", "관련 내용이 없",
+    "찾지 못했", "찾을 수 없", "포함되어 있지 않", "언급되어 있지 않", "나와 있지 않", "확인할 수 없",
+)
 
 
 def _denies_information(answer: str) -> bool:
@@ -109,8 +112,21 @@ def generate_answer(question: str, ranked_results: list) -> dict:
     if _denies_information(answer_text):
         return {"answer": "관련 문서를 찾지 못했습니다.", "sources": []}
 
-    sources = sorted({c["doc_id"] for c in context})
-    return {"answer": answer_text, "sources": sources}
+    # source는 답변이 실제로 근거한 문서만 인용한다. build_context는 1위(primary) 문서를
+    # 맨 앞에 통째로 넣고 보조 문서를 뒤에 덧붙이는데, 보조 문서까지 전부 인용하면
+    # 실제 근거가 아닌 문서가 출처로 붙는다(실측: Bearer 답변의 근거는 DOC-020뿐인데
+    # DOC-012·015까지 인용됨). 답변 본문에 다른 문서의 고유 내용이 실제로 반영된 경우만
+    # 그 보조 문서를 함께 인용한다.
+    primary = context[0]["doc_id"]
+    sources = [primary]
+    ans_terms = _terms(answer_text)
+    for c in context:
+        if c["doc_id"] == primary or c["doc_id"] in sources:
+            continue
+        # 이 보조 청크의 어휘가 답변에 실제로 반영됐는지 (흔한 단어 제외한 겹침)
+        if len(ans_terms & _terms(c["content"])) >= 2:
+            sources.append(c["doc_id"])
+    return {"answer": answer_text, "sources": sorted(set(sources))}
 
 
 if __name__ == "__main__":
