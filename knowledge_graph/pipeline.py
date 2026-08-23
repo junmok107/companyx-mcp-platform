@@ -22,11 +22,15 @@ def answer_question(question: str) -> dict:
     try:
         spec = extract_spec(question)
     except Exception as e:
-        return {"answer": f"질문을 그래프 스펙으로 변환하지 못했습니다: {e}", "raw_data": None, "source": "knowledge_graph"}
+        return {"answer": f"질문을 그래프 스펙으로 변환하지 못했습니다: {e}", "raw_data": None,
+                "tool": "knowledge_graph", "source": []}
 
     result = execute(g, spec, name_index)
     answer_text = generate_answer(question, result)
-    return {"answer": answer_text, "raw_data": result, "source": "knowledge_graph", "spec": spec}
+    # source는 세 도구 공통으로 '근거 목록'이다 (그래프의 근거는 탐색된 노드 id).
+    node_ids = [n["id"] for n in result.get("nodes", []) if "id" in n]
+    return {"answer": answer_text, "raw_data": result, "tool": "knowledge_graph",
+            "source": node_ids, "spec": spec}
 
 
 if __name__ == "__main__":

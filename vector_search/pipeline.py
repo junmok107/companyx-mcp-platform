@@ -15,6 +15,7 @@ def answer_question(question: str, top_k: int = 100) -> dict:
     return {
         "answer": out["answer"],
         "raw_data": ranked,
+        "tool": "vector_search",
         "source": out["sources"],
     }
 

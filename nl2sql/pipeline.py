@@ -79,13 +79,17 @@ def answer_question(question: str) -> dict:
     try:
         result = run_select(sql)
     except UnsafeQueryError as e:
-        return {"answer": f"안전하지 않은 쿼리라 실행을 거부했습니다: {e}", "raw_data": None, "source": "nl2sql", "sql": sql}
+        return {"answer": f"안전하지 않은 쿼리라 실행을 거부했습니다: {e}", "raw_data": None,
+                "tool": "nl2sql", "source": [], "sql": sql}
     except Exception as e:
-        return {"answer": f"쿼리 실행 중 오류가 발생했습니다: {e}", "raw_data": None, "source": "nl2sql", "sql": sql}
+        return {"answer": f"쿼리 실행 중 오류가 발생했습니다: {e}", "raw_data": None,
+                "tool": "nl2sql", "source": [], "sql": sql}
 
     result = _expand_ties(question, sql, result)
     answer_text = generate_answer(question, result)
-    return {"answer": answer_text, "raw_data": result, "source": "nl2sql", "sql": sql}
+    # source는 세 도구 공통으로 '근거 목록'이다 (NL2SQL의 근거는 실행된 쿼리).
+    return {"answer": answer_text, "raw_data": result, "tool": "nl2sql",
+            "source": [" ".join(sql.split())], "sql": sql}
 
 
 if __name__ == "__main__":
