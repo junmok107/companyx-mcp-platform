@@ -129,13 +129,13 @@
     "question": "Product-C1을 사용하는 고객사는 어디야?",
     "expected_tool": "knowledge_graph",
     "routed_to": "knowledge_graph",
-    "answer": "관련 결과 6건: Client-H, Client-V, Client-T, Client-Y, Client-Q, Client-D"
+    "answer": "관련 결과 6건: Client-Q, Client-D, Client-T, Client-Y, Client-H, Client-V"
   },
   {
     "question": "클라우드사업부 소속 직원들은 누구야?",
     "expected_tool": "knowledge_graph",
     "routed_to": "knowledge_graph",
-    "answer": "관련된 결과를 찾지 못했습니다."
+    "answer": "클라우드사업부 소속 직원은 이지훈, 황재원, 한은지, 서재원, 황다은, 김도윤, 안진우, 김준혁, 강현우, 조동현 입니다."
   },
   {
     "question": "서울물산 담당 엔지니어는 누구야?",
@@ -147,7 +147,7 @@
     "question": "Product-D1 제품과 관련된 프로젝트는?",
     "expected_tool": "knowledge_graph",
     "routed_to": "knowledge_graph",
-    "answer": "탐색 결과 목록에 따르면 Product-D1 제품과 관련된 프로젝트는 Client-B CI/CD 파이프라인 구축 (project: status=planning, budget=11832) 입니다."
+    "answer": "관련 결과 6건: Client-B CI/CD 파이프라인 구축, Client-Q AI 예측 모델 구축, Client-B CI/CD 파이프라인 구축, Client-AB DevOps 전환, Client-Y 데이터 거버넌스, Client-B 하이브리드 클라우드"
   },
   {
     "question": "기술 지원 이슈가 가장 많은 제품은?",
@@ -165,13 +165,13 @@
     "question": "진행 중인 프로젝트를 이끄는 직원 목록",
     "expected_tool": "knowledge_graph",
     "routed_to": "knowledge_graph",
-    "answer": "진행 중인 프로젝트를 이끄는 직원은 조재원, 박성민, 권소연, 한태호, 장미라 입니다."
+    "answer": "진행 중인 프로젝트를 이끄는 직원은 류서연, 서재원, 박성민, 장미라, 조재원, 안진우, 권소연, 김준혁, 한태호, 조동현 입니다."
   },
   {
     "question": "Product-S1 관련 고객 이슈 현황은?",
     "expected_tool": "knowledge_graph",
     "routed_to": "knowledge_graph",
-    "answer": "관련된 결과를 찾지 못했습니다."
+    "answer": "관련 결과 8건: Client-S, Client-J, Client-D, Client-AA, Client-O, Client-E, Client-X, Client-V"
   },
   {
     "question": "가장 많은 고객을 담당하는 직원은?",
