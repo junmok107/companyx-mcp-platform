@@ -1,0 +1,48 @@
+html, body, #root {
+  height: 100%;
+}
+
+html, body {
+  margin: 0;
+  background: var(--color-bg);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .25; }
+  50% { opacity: 1; }
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.scr::-webkit-scrollbar {
+  width: 10px;
+}
+.scr::-webkit-scrollbar-thumb {
+  background: rgba(29, 31, 32, .22);
+}
+
+a {
+  color: var(--color-accent-700);
+}
+a:hover {
+  color: var(--color-accent);
+}
+
+.chat-row-btn:hover {
+  background: rgba(29, 31, 32, .05);
+}
+.chat-del-btn:hover {
+  background: rgba(29, 31, 32, .08);
+  color: var(--color-text);
+}
+.sample-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-800);
+}
+.example-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-100);
+}
