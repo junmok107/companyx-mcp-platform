@@ -27,6 +27,28 @@ NON_MONEY_TOKENS = ("count", "cnt", "_id", "num", "rate", "ratio", "pct",
 ADDITIVE_TOKENS = ("total", "sum", "amount", "sales", "매출", "금액", "합계")
 NON_ADDITIVE_TOKENS = ("avg", "mean", "평균", "증가율", "rate", "ratio")
 
+# 다열(3열 이상) 결과를 사람이 읽기 좋게 다듬기 위한 컬럼 라벨/값 사전.
+# raw_data 원본은 그대로 두고, 화면에 보이는 answer 문장만 한글 라벨·축약값으로 바꾼다.
+COL_LABELS = {
+    "id": "번호", "name": "이름", "title": "제목", "email": "이메일",
+    "contact_email": "담당자이메일", "position": "직급", "dept": "부서",
+    "dept_name": "부서", "department": "부서", "hire_date": "입사일",
+    "salary": "연봉", "industry": "업종", "region": "지역", "company_size": "규모",
+    "contact_name": "담당자", "registered_at": "등록일", "category": "카테고리",
+    "description": "설명", "price_monthly": "월요금", "version": "버전",
+    "release_date": "출시일", "status": "상태", "contract_type": "계약유형",
+    "amount": "금액", "start_date": "시작일", "end_date": "종료일", "budget": "예산",
+    "sale_date": "매출일", "quarter": "분기", "priority": "우선순위",
+    "created_at": "등록일", "resolved_at": "해결일", "count": "건수",
+}
+# 알려진 enum 컬럼의 값만 한글로 옮긴다(다른 컬럼의 같은 문자열을 건드리지 않게 컬럼명으로 한정).
+ENUM_MAPS = {
+    "status": {"active": "활성", "completed": "완료", "cancelled": "취소",
+               "planning": "계획", "in_progress": "진행중", "on_hold": "보류",
+               "open": "미해결", "resolved": "해결", "closed": "종료", "beta": "베타"},
+    "priority": {"low": "낮음", "medium": "보통", "high": "높음", "critical": "긴급"},
+}
+
 ANSWER_PROMPT = """\
 당신은 질문에 대한 데이터 조회 결과를 자연스러운 한국어 문장으로 요약하는 어시스턴트다.
 아래 질문과 SQL 조회 결과를 보고, 결과에 있는 사실만 근거로 한 문장으로 간결하게 답변한다.
@@ -78,12 +100,58 @@ def format_manwon(value) -> str:
     return ("-" + s) if neg else s
 
 
-def _format_value(col, v):
+def _humanize_label(col) -> str:
+    return COL_LABELS.get(str(col).lower(), str(col).replace("_", " "))
+
+
+def _is_id_col(col) -> bool:
+    c = str(col).lower()
+    return c == "id" or c.endswith("_id") or c.endswith("_no") or c.endswith("code")
+
+
+def _is_name_col(col) -> bool:
+    c = str(col).lower()
+    return c in ("name", "title") or c.endswith("_name")
+
+
+def _format_value(col, v) -> str:
+    """값 하나를 사람이 읽기 좋게 변환: 금액→억/만원, enum→한글, 일시→날짜, 불리언→예/아니오."""
     if isinstance(v, bool):
-        return str(v)
+        return "예" if v else "아니오"
     if _is_money_col(col) and isinstance(v, (int, float)):
         return format_manwon(v)
-    return str(v)
+    s = str(v)
+    c = str(col).lower()
+    if c in ENUM_MAPS and s in ENUM_MAPS[c]:
+        return ENUM_MAPS[c][s]
+    # 'YYYY-MM-DD ...' 형태의 날짜/일시는 날짜만 남긴다(분기 '2025-Q3'는 길이가 짧아 제외).
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        return s[:10]
+    if len(s) > 80:
+        return s[:79] + "…"
+    return s
+
+
+def _format_row_multi(columns: list, row: tuple) -> str:
+    """3열 이상: 이름/제목을 앞세우고 #번호를 붙인 뒤, 나머지는 '라벨 값 · 라벨 값'으로."""
+    pairs = list(zip(columns, row))
+    used: set[int] = set()
+    lead = ""
+    head_idx = next((i for i, (c, _) in enumerate(pairs) if _is_name_col(c)), None)
+    if head_idx is None:  # 이름/제목 컬럼이 없으면 첫 비ID 문자열 컬럼을 머리로 쓴다.
+        head_idx = next((i for i, (c, v) in enumerate(pairs)
+                         if not _is_id_col(c) and isinstance(v, str)), None)
+    if head_idx is not None:
+        lead = _format_value(*pairs[head_idx])
+        used.add(head_idx)
+        id_idx = next((i for i, (c, _) in enumerate(pairs) if _is_id_col(c)), None)
+        if id_idx is not None:
+            lead = f"#{pairs[id_idx][1]} {lead}"
+            used.add(id_idx)
+    rest = [f"{_humanize_label(c)} {_format_value(c, v)}"
+            for i, (c, v) in enumerate(pairs) if i not in used]
+    segs = ([lead] if lead else []) + rest
+    return " · ".join(segs)
 
 
 def _format_row(columns: list, row: tuple) -> str:
@@ -92,8 +160,7 @@ def _format_row(columns: list, row: tuple) -> str:
     # (개체, 지표) 2열은 가장 흔한 목록 형태다. "이름 — 값"으로 자연스럽게 읽히게 한다.
     if len(columns) == 2:
         return f"{_format_value(columns[0], row[0])} — {_format_value(columns[1], row[1])}"
-    # 3열 이상은 어떤 값인지 구분이 필요하므로 컬럼명을 유지하되 값은 포맷한다.
-    return ", ".join(f"{c}={_format_value(c, v)}" for c, v in zip(columns, row))
+    return _format_row_multi(columns, row)
 
 
 def _sum_summary(columns: list, rows: list) -> str:
@@ -169,8 +236,17 @@ if __name__ == "__main__":
         "rows": [("홍길동", "기술지원팀", 5200), ("김철수", "기술지원팀", 4800)],
         "total_count": 2, "truncated": False,
     }
-    print("\n[3열 — 컬럼명 유지, 금액만 포맷]")
+    print("\n[3열 — 이름 머리 + 한글 라벨 + 금액 포맷]")
     print(render_rows(emp["columns"], emp["rows"], emp["total_count"], emp["truncated"]))
+
+    tickets = {
+        "columns": ["id", "title", "status", "created_at"],
+        "rows": [(37, "프로덕션 핫픽스 요청", "in_progress", "2026-03-20 16:08:23"),
+                 (64, "디스크 용량 부족 경고", "open", "2025-04-15 11:32:44")],
+        "total_count": 2, "truncated": False,
+    }
+    print("\n[4열 — #번호 + 제목 머리 + 상태/날짜 한글화·축약]")
+    print(render_rows(tickets["columns"], tickets["rows"], tickets["total_count"], tickets["truncated"]))
 
     count = {"columns": ["count"], "rows": [(5,)]}
     print("\n[비금액 단일값 — 그대로]")
