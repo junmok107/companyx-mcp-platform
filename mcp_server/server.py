@@ -13,8 +13,19 @@ import sys
 from pathlib import Path
 
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# 세 도구 모두 조회 전용이다. MCP 표준의 기계판독 힌트로 이를 명시한다.
+#  - read_only_hint  : 상태를 바꾸지 않는다(SELECT 전용 role, 그래프/벡터도 읽기만).
+#  - destructive_hint: 파괴적 동작 없음.
+#  - idempotent_hint : 같은 질문은 같은 결과(결정론적 렌더링/순회/검색).
+#  - open_world_hint : False — 외부 API가 아니라 폐쇄형 사내 데이터셋만 다룬다.
+_READ_ONLY = ToolAnnotations(
+    read_only_hint=True, destructive_hint=False,
+    idempotent_hint=True, open_world_hint=False,
+)
 
 # 세 도구 디렉터리 모두 "pipeline.py", "answer.py", "llm_client.py" 등 같은 파일명을 쓰기 때문에
 # (각 도구를 독립 모듈로 유지하려는 설계 — 작업계획 문서 참고), 이름 충돌 없이 각각 로드하기 위해
@@ -80,25 +91,25 @@ def _guarded(tool_name: str, handler, question: str) -> dict:
         return _reject(f"처리 중 오류가 발생했습니다: {type(e).__name__}: {e}", tool_name)
 
 
-@mcp.tool()
+@mcp.tool(title="정형 데이터 조회 (NL2SQL)", annotations=_READ_ONLY)
 def nl2sql_query(question: str) -> dict:
     """정형 데이터(매출, 계약, 직원, 제품, 티켓 등)에 대한 자연어 질문을 SQL로 변환해 조회한다."""
     return _guarded("nl2sql", nl2sql_pipeline.answer_question, question)
 
 
-@mcp.tool()
+@mcp.tool(title="관계 탐색 (지식 그래프)", annotations=_READ_ONLY)
 def knowledge_graph_query(question: str) -> dict:
     """고객사-제품-직원-프로젝트-부서 간 관계(사용, 담당, 소속, 리드 등)를 탐색해 답한다."""
     return _guarded("knowledge_graph", kg_pipeline.answer_question, question)
 
 
-@mcp.tool()
+@mcp.tool(title="문서 의미 검색 (벡터)", annotations=_READ_ONLY)
 def vector_search_query(question: str) -> dict:
     """장애보고서, 기술문서, 회의록, 제안서 등 비정형 문서를 의미 검색해 답한다."""
     return _guarded("vector_search", vector_pipeline.answer_question, question)
 
 
-@mcp.tool()
+@mcp.tool(title="자동 라우팅", annotations=_READ_ONLY)
 def ask(question: str) -> dict:
     """어떤 도구를 써야 할지 모를 때 사용하는 진입점. 규칙 기반 라우터가 질문 유형에 맞는
     도구(NL2SQL/지식그래프/벡터검색)를 자동으로 선택해서 호출한다."""

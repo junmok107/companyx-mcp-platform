@@ -13,10 +13,12 @@
 
 import importlib
 import sys
+import time
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -63,6 +65,40 @@ app.add_middleware(
     allow_methods=["POST", "GET"],
     allow_headers=["*"],
 )
+
+# ── IP별 요청 제한 (finance-mcp의 토큰버킷 패턴 이식) ──
+# 도구 호출은 LLM 때문에 건당 5~10초라 사람은 이 한도에 닿기 어렵다. 폭주/오용 방어용.
+RATE_LIMIT = 60          # 창(window)당 허용 요청 수
+RATE_WINDOW = 60.0       # 초
+_rate_state: dict[str, tuple[int, float]] = {}
+
+
+def _allow(ip: str) -> bool:
+    now = time.monotonic()
+    count, reset_at = _rate_state.get(ip, (0, 0.0))
+    if now > reset_at:
+        _rate_state[ip] = (1, now + RATE_WINDOW)
+        # 만료된 항목 정리(메모리 누수 방지)
+        for k in [k for k, (_, r) in _rate_state.items() if now > r]:
+            if k != ip:
+                _rate_state.pop(k, None)
+        return True
+    if count >= RATE_LIMIT:
+        return False
+    _rate_state[ip] = (count + 1, reset_at)
+    return True
+
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):
+    if request.method == "POST":
+        ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "unknown")
+        if not _allow(ip.split(",")[0].strip()):
+            return JSONResponse(
+                {"answer": "요청이 너무 잦습니다. 잠시 후 다시 시도해 주세요.",
+                 "raw_data": None, "tool": "ask", "source": []},
+                status_code=429, headers={"Retry-After": "60"})
+    return await call_next(request)
 
 
 class Query(BaseModel):
