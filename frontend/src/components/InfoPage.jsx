@@ -80,12 +80,12 @@ export default function InfoPage() {
             <table className="table">
               <thead><tr><th>구간</th><th>중앙값</th></tr></thead>
               <tbody>
-                <tr><td>라우팅 — 규칙 경로</td><td>0.00ms</td></tr>
+                <tr><td>라우팅 — 규칙 경로</td><td>0.01ms 미만</td></tr>
                 <tr><td>라우팅 — LLM 폴백</td><td>약 2.8초</td></tr>
-                <tr><td>NL2SQL — 목록형</td><td>약 5초</td></tr>
-                <tr><td>NL2SQL — 단일값</td><td>약 9초</td></tr>
-                <tr><td>지식 그래프 — 목록형</td><td>약 4.7초</td></tr>
-                <tr><td>벡터 검색</td><td>약 6초</td></tr>
+                <tr><td>NL2SQL — 목록형</td><td>약 5.5초</td></tr>
+                <tr><td>NL2SQL — 단일값</td><td>약 10초</td></tr>
+                <tr><td>지식 그래프 — 목록형</td><td>약 5.2초</td></tr>
+                <tr><td>벡터 검색</td><td>약 7초</td></tr>
               </tbody>
             </table>
             <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--color-neutral-700)', lineHeight: 1.6 }}>
