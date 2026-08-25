@@ -47,8 +47,8 @@ export default function Header({ page, onNavigate }) {
           font: '10px ui-monospace,Menlo,monospace', color: 'var(--color-neutral-600)',
         }}
       >
-        <span style={{ width: 7, height: 7, background: 'var(--color-neutral-500)' }} />
-        데모 모드 · 목업 데이터 (실제 MCP 서버 미연결)
+        <span style={{ width: 7, height: 7, background: 'var(--color-accent)' }} />
+        실데이터 연동 · 브릿지(:8000) · Ollama gemma2:9b · pgvector
       </div>
     </header>
   )

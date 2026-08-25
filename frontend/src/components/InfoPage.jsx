@@ -89,7 +89,7 @@ export default function InfoPage() {
               </tbody>
             </table>
             <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--color-neutral-700)', lineHeight: 1.6 }}>
-              이 화면은 목업이라 확인 편의를 위해 지연을 1.5~3초로 줄여 재현합니다. 스트리밍이 아니라 완료 후 일괄 응답입니다.
+              표시되는 경과 시간은 브릿지(:8000)를 통해 실제 백엔드가 처리한 실측값입니다. 대부분은 로컬 Ollama(gemma2:9b) LLM 호출 시간이며, 스트리밍이 아니라 완료 후 일괄 응답입니다.
             </p>
           </div>
         </div>

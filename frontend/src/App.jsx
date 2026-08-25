@@ -8,8 +8,7 @@ import AnswerMessage from './components/AnswerMessage'
 import Composer from './components/Composer'
 import ExamplesPage from './components/ExamplesPage'
 import InfoPage from './components/InfoPage'
-import { TOOLS } from './data/scenarios'
-import { pick } from './lib/pick'
+import { askBackend } from './lib/api'
 
 const MAX_QUESTION_CHARS = 2000
 
@@ -60,21 +59,21 @@ export default function App() {
     )))
   }
 
-  // Resolves a question against the mock router/scenarios and drives it
-  // through a pending message to a patched-in answer, on the given chat.
+  // Sends a question to the real backend bridge and drives it through a
+  // pending message to a patched-in answer, on the given chat. The pending
+  // tool badge shows the forced tool when the user bypassed `ask`; for auto
+  // routing it stays generic until the backend reveals which tool ran.
   const runQuestion = (chatId, title, q) => {
     const id = 'm' + Date.now()
     const forced = tool !== 'ask'
-    const sc = pick(q, forced ? tool : null)
-    const routed = forced ? pick(q, null) : null
-    const mismatch = routed && routed.tool !== sc.tool ? TOOLS[routed.tool].label : null
+    const forcedTool = forced ? tool : null
 
     clearInterval(timerRef.current)
     clearTimeout(jobRef.current)
 
     pushMessages(chatId, title, [
       { id: id + 'u', role: 'user', text: q },
-      { id, role: 'pending', tool: sc.tool, forced },
+      { id, role: 'pending', tool: forcedTool, forced },
     ], { draft: '' })
 
     const t0 = Date.now()
@@ -83,11 +82,20 @@ export default function App() {
       if (el) el.textContent = ((Date.now() - t0) / 1000).toFixed(1) + '초 경과'
     }, 100)
 
-    jobRef.current = setTimeout(() => {
-      clearInterval(timerRef.current)
-      const sec = (sc.latency / 1000).toFixed(1)
-      patchMessage(chatId, id, { role: 'answer', question: q, forced, routerWould: mismatch, elapsed: sec, ...sc })
-    }, sc.latency)
+    askBackend(q, forcedTool)
+      .then((res) => {
+        clearInterval(timerRef.current)
+        patchMessage(chatId, id, { role: 'answer', question: q, forced, ...res })
+      })
+      .catch((e) => {
+        clearInterval(timerRef.current)
+        patchMessage(chatId, id, {
+          role: 'answer', question: q, forced, tool: null, error: true,
+          answer: '요청 처리 중 오류가 발생했습니다.',
+          refusal: String(e && e.message ? e.message : e),
+          elapsed: ((Date.now() - t0) / 1000).toFixed(1),
+        })
+      })
   }
 
   const submit = () => {

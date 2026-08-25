@@ -19,6 +19,8 @@ nl2sql/           NL2SQL 도구 — 자연어→SQL 변환, 읽기 전용 실행
 knowledge_graph/  지식 그래프 도구 — 질문→탐색 스펙 추출, networkx 순회, 답변 생성
 vector_search/    벡터 검색 도구 — 문서 임베딩 파이프라인, pgvector 유사도 검색, 리랭킹, 답변 생성
 mcp_server/       MCP 서버 — 위 3개 도구를 MCP 프로토콜로 노출, 규칙 기반 라우터
+bridge/           HTTP 브릿지 — 세 도구를 웹에서 부를 수 있게 FastAPI로 감쌈
+frontend/         React + Vite 콘솔 UI (브릿지를 통해 실데이터 연동)
 sql/, documents/, graph/, questions.json   원본 데이터셋 (DATASET.md 참고)
 핵심로직_작업계획_및_검증기준.md   각 도구 설계 근거, 디버깅 기록, 통과 기준
 ```
@@ -33,6 +35,7 @@ sql/, documents/, graph/, questions.json   원본 데이터셋 (DATASET.md 참�
 
 ```bash
 pip install psycopg mcp networkx
+pip install fastapi uvicorn        # 웹 프론트엔드용 HTTP 브릿지에만 필요
 ollama pull gemma2:9b
 ollama pull nomic-embed-text
 ```
@@ -72,6 +75,23 @@ python vector_search/embed.py
 ```bash
 python mcp_server/server.py
 ```
+
+### 6. 웹 프론트엔드 (선택)
+
+MCP 서버는 stdio 프로토콜이라 브라우저에서 직접 못 부른다. `bridge/server.py`가 세 도구
+파이프라인을 그대로 import해 HTTP(`/ask`, `/tool/{name}`, `/health`)로 노출하고,
+`frontend/`(React + Vite)가 이를 호출한다.
+
+```bash
+# (1) 브릿지 — 환경변수는 위 3번과 동일
+python -m uvicorn bridge.server:app --host 127.0.0.1 --port 8000
+
+# (2) 프론트엔드 — 별도 터미널
+cd frontend && npm install && npm run dev   # http://localhost:5173
+```
+
+브릿지 응답 계약은 [`docs/frontend_requirements.md`](docs/frontend_requirements.md)에,
+프론트엔드의 어댑터는 [`frontend/src/lib/api.js`](frontend/src/lib/api.js)에 있다.
 
 ## 테스트
 
