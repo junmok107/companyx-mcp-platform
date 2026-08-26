@@ -214,6 +214,13 @@ def _is_money_question(question: str) -> bool:
     return any(n in question for n in _MONEY_NOUNS) and any(c in question for c in _MONEY_AGG_CTX)
 
 
+_COUNT_HINTS = ("몇 개", "몇개", "몇 건", "몇건", "개수", "건수", "몇 명", "몇명", "인원", "수는", "수야", "건이")
+
+
+def _is_count_question(question: str) -> bool:
+    return any(h in question for h in _COUNT_HINTS)
+
+
 def generate_answer(question: str, query_result: dict) -> str:
     """query_result: executor.run_select()가 반환하는 {columns, rows, row_count} 형식."""
     columns = query_result["columns"]
@@ -226,6 +233,9 @@ def generate_answer(question: str, query_result: dict) -> str:
     # "총 매출액은 23859입니다" 같은 답변이 목록 형태보다 읽기 좋기 때문.
     if len(rows) == 1 and len(columns) == 1:
         col, val = columns[0], rows[0][0]
+        # 건수 질문의 0은 LLM이 비문("계약은 건이 없어요")을 만들기 쉬워 결정론적으로 답한다(F-3).
+        if isinstance(val, int) and not isinstance(val, bool) and val == 0 and _is_count_question(question):
+            return "조건에 해당하는 건이 없습니다 (0건)."
         if _is_number(val) and (_is_money_col(col) or _is_money_question(question)):
             shown = format_manwon(val)
         else:

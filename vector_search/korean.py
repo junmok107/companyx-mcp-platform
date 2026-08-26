@@ -32,6 +32,9 @@ SYNONYMS = {
     "쿠버네티스": "kubernetes", "파드": "pod", "도커": "docker",
     "레디스": "redis", "에스에스엘": "ssl", "에이피아이": "api",
     "커넥션": "connection", "풀": "pool", "로그": "log",
+    # OOM(Out Of Memory)은 문서에선 영문 약어로, 질문에선 "메모리 부족"으로 표현돼
+    # 어휘가 겹치지 않는다. 도메인 동의어로 통일한다(F-5).
+    "oom": "메모리",
 }
 
 _WORD = re.compile(r"[가-힣A-Za-z0-9]+")

@@ -79,6 +79,34 @@ def search_chunks(query: str, top_k: int = 5) -> list[dict]:
     return results
 
 
+_DOC_FREQ_CACHE = None
+
+
+def corpus_doc_frequencies() -> tuple[dict, int]:
+    """각 토큰이 등장하는 '문서 수'(document frequency)와 총 문서 수를 돌려준다.
+
+    재순위에서 흔한 단어(장애·부족처럼 장애보고서 다수에 반복되는 정형 어휘)와
+    희소한 단어(컨테이너·OOM처럼 특정 문서에만 있는 변별 어휘)를 구분해 IDF 가중하기
+    위한 통계다. "메모리 부족" 질문에서 정답 문서(OOM 사례)가 정형 문구 공유 문서에
+    밀려 컨텍스트에서 빠지던 문제(F-5)를 근본적으로 완화한다. 프로세스당 1회만 계산.
+    """
+    global _DOC_FREQ_CACHE
+    if _DOC_FREQ_CACHE is not None:
+        return _DOC_FREQ_CACHE
+    with psycopg.connect(DB_DSN) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT doc_id, string_agg(content, ' ') FROM document_chunks GROUP BY doc_id"
+            )
+            rows = cur.fetchall()
+    df: dict[str, int] = {}
+    for _doc_id, text in rows:
+        for t in set(_terms(text or "")):
+            df[t] = df.get(t, 0) + 1
+    _DOC_FREQ_CACHE = (df, len(rows))
+    return _DOC_FREQ_CACHE
+
+
 def fetch_document_chunks(doc_id: str) -> list[dict]:
     """한 문서의 모든 청크를 원래 순서대로 가져온다.
 
