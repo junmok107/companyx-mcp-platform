@@ -84,7 +84,10 @@ def run_aggregate(g, spec: dict) -> dict:
     relation = spec["relation"]
     group_by = spec["group_by"]
     order = spec.get("order", "desc")
-    limit = spec.get("limit", 1)
+    # LLM이 "모두"를 보고 "limit": null 을 생성하면 .get("limit", 1)이 None을 돌려줘
+    # 아래 len() 비교에서 크래시했다(F-4). null·0 모두 기본값 1로 흡수한다. "가장 많이 …
+    # 모두"는 공동 1위 전체를 뜻하고, 아래 동점 확장이 그 co-max들을 빠짐없이 반환한다.
+    limit = spec.get("limit") or 1
 
     counts: dict[str, int] = {}
     for source, target, data in g.edges(data=True):

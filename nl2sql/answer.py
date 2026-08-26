@@ -8,9 +8,17 @@
     부수 효과로 LLM 호출 1회가 줄어 응답 시간도 짧아진다.
 """
 
+from decimal import Decimal
+
 from llm_client import call_ollama
 
 MAX_DISPLAY_ROWS = 50
+
+
+def _is_number(v) -> bool:
+    # PostgreSQL의 AVG/SUM 등은 numeric → psycopg가 Decimal로 돌려준다. int/float만 보면
+    # 집계 금액이 통째로 포맷에서 빠져(F-1) 원시값이 LLM에 넘어가 100배 틀린 단위가 붙는다.
+    return isinstance(v, (int, float, Decimal)) and not isinstance(v, bool)
 
 # ── 금액 포맷 ──
 # 모든 금액 컬럼(salary, price_monthly, amount, budget)과 그 집계 별칭(total_sales,
@@ -118,7 +126,7 @@ def _format_value(col, v) -> str:
     """값 하나를 사람이 읽기 좋게 변환: 금액→억/만원, enum→한글, 일시→날짜, 불리언→예/아니오."""
     if isinstance(v, bool):
         return "예" if v else "아니오"
-    if _is_money_col(col) and isinstance(v, (int, float)):
+    if _is_money_col(col) and _is_number(v):
         return format_manwon(v)
     s = str(v)
     c = str(col).lower()
@@ -170,7 +178,7 @@ def _sum_summary(columns: list, rows: list) -> str:
         return ""
     i = idxs[0]
     try:
-        total = sum(r[i] for r in rows if isinstance(r[i], (int, float)) and not isinstance(r[i], bool))
+        total = sum(r[i] for r in rows if _is_number(r[i]))
     except (TypeError, ValueError, IndexError):
         return ""
     return f" · 합계 {format_manwon(total)}"
@@ -196,6 +204,16 @@ def render_rows(columns: list, rows: list, total: int | None = None, truncated: 
     return header + "\n" + "\n".join(lines)
 
 
+# 별칭 없는 집계(round(avg(amount)) 등)는 컬럼명이 'round'라 금액으로 인식되지 않는다.
+# 단일값 경로에서 질문이 금액을 묻는데 결과가 숫자면 만원 단위로 포맷해 LLM에 넘긴다(F-1 보완).
+_MONEY_NOUNS = ("금액", "매출액", "매출", "연봉", "예산", "계약금", "단가", "비용", "가격", "요금")
+_MONEY_AGG_CTX = ("얼마", "평균", "총", "합계", "최대", "최소", "최고", "최저", "큰", "작은", "높", "낮")
+
+
+def _is_money_question(question: str) -> bool:
+    return any(n in question for n in _MONEY_NOUNS) and any(c in question for c in _MONEY_AGG_CTX)
+
+
 def generate_answer(question: str, query_result: dict) -> str:
     """query_result: executor.run_select()가 반환하는 {columns, rows, row_count} 형식."""
     columns = query_result["columns"]
@@ -207,7 +225,12 @@ def generate_answer(question: str, query_result: dict) -> str:
     # 단일 행·단일 값(집계 결과 등)만 LLM으로 자연스럽게 문장화한다. 누락 위험이 없고
     # "총 매출액은 23859입니다" 같은 답변이 목록 형태보다 읽기 좋기 때문.
     if len(rows) == 1 and len(columns) == 1:
-        prompt = ANSWER_PROMPT.format(question=question, columns=columns, rows=_format_row(columns, rows[0]))
+        col, val = columns[0], rows[0][0]
+        if _is_number(val) and (_is_money_col(col) or _is_money_question(question)):
+            shown = format_manwon(val)
+        else:
+            shown = _format_value(col, val)
+        prompt = ANSWER_PROMPT.format(question=question, columns=columns, rows=shown)
         return call_ollama(prompt)
 
     return render_rows(columns, rows, query_result.get("total_count", len(rows)),

@@ -25,8 +25,13 @@ def answer_question(question: str) -> dict:
         return {"answer": f"질문을 그래프 스펙으로 변환하지 못했습니다: {e}", "raw_data": None,
                 "tool": "knowledge_graph", "source": []}
 
-    result = execute(g, spec, name_index)
-    answer_text = generate_answer(question, result)
+    # 스펙이 유효하지 않은 값(예: limit:null)을 담을 수 있으므로 순회·답변 생성도 감싼다(F-4).
+    try:
+        result = execute(g, spec, name_index)
+        answer_text = generate_answer(question, result)
+    except Exception as e:
+        return {"answer": f"그래프 탐색 중 오류가 발생했습니다: {type(e).__name__}: {e}",
+                "raw_data": None, "tool": "knowledge_graph", "source": [], "spec": spec}
     # source는 세 도구 공통으로 '근거 목록'이다 (그래프의 근거는 탐색된 노드 id).
     node_ids = [n["id"] for n in result.get("nodes", []) if "id" in n]
     return {"answer": answer_text, "raw_data": result, "tool": "knowledge_graph",

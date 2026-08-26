@@ -12,6 +12,15 @@
 --   psql companyx -v reader_password="$MCP_READER_PASSWORD" -f sql/03-roles.sql
 -- ============================================================
 
+-- 재실행 가능하게: 이미 권한이 부여된 role은 의존성 때문에 DROP ROLE이 실패한다(F-12).
+-- role이 존재하면 먼저 이 DB에서의 모든 부여 권한·소유 객체를 정리한 뒤 삭제한다.
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'mcp_reader') THEN
+        EXECUTE 'DROP OWNED BY mcp_reader';
+    END IF;
+END $$;
+
 DROP ROLE IF EXISTS mcp_reader;
 
 CREATE ROLE mcp_reader

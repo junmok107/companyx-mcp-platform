@@ -34,8 +34,7 @@ sql/, documents/, graph/, questions.json   원본 데이터셋 (DATASET.md 참�
 - [Ollama](https://ollama.com) — `gemma2:9b`(생성), `nomic-embed-text`(임베딩, 768차원)
 
 ```bash
-pip install psycopg mcp networkx
-pip install fastapi uvicorn        # 웹 프론트엔드용 HTTP 브릿지에만 필요
+pip install -r requirements.txt    # 버전 고정된 매니페스트(핵심 + 브릿지). mcp==2.0.0 필수 고정.
 ollama pull gemma2:9b
 ollama pull nomic-embed-text
 ```
@@ -120,7 +119,7 @@ raw JSON 직접 순회, 벡터 검색은 문서 원문 검색으로 정답 문�
 | 벡터 검색 | Recall@1·3·5 각 8/8, 근거 정확도 8/8 | 정답 문서를 원문 검색으로 확정 |
 | 벡터 검색 — 코퍼스 밖 질문 | 거부 5/5 | 데이터셋에 없는 주제를 물었을 때 답을 지어내지 않음 |
 | 벡터 검색 — 패러프레이즈 | 3/4 | 원문과 어휘가 겹치지 않게 바꿔 쓴 질문 |
-| SQL 검증 | 28/28 | 공격 차단 + 정상 쿼리 오탐 방지 양쪽, DB 연결 불필요 |
+| SQL 검증 | 46/46 | 공격 차단 + 정상 쿼리 오탐 방지 양쪽, DB 연결 불필요 (독립 감사 우회 벡터 포함) |
 
 `questions.json` Q24 "서울물산 담당 엔지니어는 누구야?"의 "서울물산"은 데이터셋 어디에도
 없다(`sql/`, `graph/`의 properties 포함 전체 문자열, `documents/`, `index.json` 전수 확인).

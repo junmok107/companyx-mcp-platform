@@ -131,7 +131,12 @@ def ask(q: Query):
     # 어느 단계가 라우팅을 결정했는지 알려 UI가 정확한 경로 라벨을 그린다.
     ruled = route_by_rules(question)
     tool = ruled if ruled is not None else route(question)
-    result = HANDLERS[tool](question)
+    # /tool/ 과 동일하게 도구 내부 예외를 구조화 응답으로 바꾼다. 없으면 HTTP 500이 되어
+    # 프론트 주 경로인 /ask가 계약을 위반한다(F-7).
+    try:
+        result = HANDLERS[tool](question)
+    except Exception as e:
+        result = _reject(f"처리 중 오류가 발생했습니다: {type(e).__name__}: {e}", tool)
     result["routed_to"] = tool
     result["route_tier"] = "rules" if ruled is not None else "llm_fallback"
     return result

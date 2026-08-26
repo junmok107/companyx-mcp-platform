@@ -42,6 +42,12 @@ SYSTEM_OBJECT_PATTERN = re.compile(
     r"|\bsession_user\b"
     r"|\bhas_[a-z_]+_privilege\b"
     r"|\b(?:row_security_active|to_regclass|to_regrole|to_regnamespace)\b"
+    # 레지스터 타입 캐스트(10::regrole → 'postgres', 1259::regclass → 'pg_class')는 OID 숫자만
+    # 쓰므로 금지 '문자열'이 쿼리에 안 나타난 채 카탈로그를 열거한다(F-8). 캐스트 형태로 차단한다.
+    r"|::\s*reg[a-z]+"
+    # set_config('statement_timeout',...) 등 세션 설정 변경(\bSET\b에 안 걸림), 서버 인코딩 노출
+    r"|\bset_config\s*\("
+    r"|\bget(?:database)?encoding\s*\("
     r"|\bversion\s*\("
     r"|\btxid_[a-z_]+\s*\("
     r"|\binet_(?:server|client)_(?:addr|port)\b"
@@ -186,6 +192,17 @@ if __name__ == "__main__":
         ("SELECT txid_current()", False),
         ("SELECT has_table_privilege('postgres','clients','SELECT')", False),
         ("SELECT to_regclass('pg_authid')", False),
+        # F-8: 레지스터 캐스트·세션설정·인코딩 노출 (독립 감사에서 우회 확인, 회귀 방지)
+        ("SELECT 10::regrole", False),
+        ("SELECT 1259::regclass", False),
+        ("SELECT 11::regnamespace", False),
+        ("SELECT 'pg_shadow'::regclass::text", False),
+        ("SELECT oid::regrole FROM x", False),
+        ("SELECT set_config('statement_timeout','0',false)", False),
+        ("SELECT getdatabaseencoding()", False),
+        # 'region' 컬럼은 reg로 시작하지만 캐스트가 아니므로 통과해야 함 (오탐 방지)
+        ("SELECT region FROM clients", True),
+        ("SELECT name FROM sales WHERE region = '서울'", True),
         # user/current 가 컬럼명·문자열로 쓰인 정상 쿼리는 통과해야 함 (오탐 방지)
         ("SELECT count(*) FROM users_table WHERE active = true", True),
         ("SELECT name FROM clients WHERE name = 'super_user'", True),
