@@ -4,7 +4,7 @@
 
 PostgreSQL(정형 데이터 + pgvector), 온프레미스 오픈웨이트 LLM(Ollama), 지식 그래프를 MCP(Model Context Protocol) 표준으로 연결해, 사용자가 자연어로 질문하면 NL2SQL·지식 그래프·벡터 검색 세 도구 중 알맞은 것을 규칙 기반 라우터가 자동으로 골라 답하는 시스템입니다.
 
-원본 데이터셋 설명은 [DATASET.md](DATASET.md) 참고.
+원본 데이터셋은 `sql/`(정형), `documents/`(문서), `graph/`(그래프), `questions.json`(예시 질문)에 있습니다.
 
 ## 아키텍처
 
@@ -21,7 +21,7 @@ vector_search/    벡터 검색 도구 — 문서 임베딩 파이프라인, pgv
 mcp_server/       MCP 서버 — 위 3개 도구를 MCP 프로토콜로 노출, 규칙 기반 라우터
 bridge/           HTTP 브릿지 — 세 도구를 웹에서 부를 수 있게 FastAPI로 감쌈
 frontend/         React + Vite 콘솔 UI (브릿지를 통해 실데이터 연동)
-sql/, documents/, graph/, questions.json   원본 데이터셋 (DATASET.md 참고)
+sql/, documents/, graph/, questions.json   원본 데이터셋
 핵심로직_작업계획_및_검증기준.md   각 도구 설계 근거, 디버깅 기록, 통과 기준
 ```
 
@@ -89,8 +89,8 @@ python -m uvicorn bridge.server:app --host 127.0.0.1 --port 8000
 cd frontend && npm install && npm run dev   # http://localhost:5173
 ```
 
-브릿지 응답 계약은 [`docs/frontend_requirements.md`](docs/frontend_requirements.md)에,
-프론트엔드의 어댑터는 [`frontend/src/lib/api.js`](frontend/src/lib/api.js)에 있다.
+브릿지 응답 계약은 `{answer, raw_data, tool, source}`(+ `sql`/`spec`/`routed_to`/`route_tier`)이며,
+이를 화면 형태로 변환하는 어댑터는 [`frontend/src/lib/api.js`](frontend/src/lib/api.js)에 있다.
 
 ## 테스트
 

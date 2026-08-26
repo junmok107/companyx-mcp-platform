@@ -5,7 +5,15 @@ __pycache__/
 node_modules/
 ~$*.doc*
 
+# 산출 문서·보고서류는 git에 올리지 않는다(로컬 보관). README·데이터셋·코드는 추적.
 결과보고서.docx
 리원에이스_지정과제_정리.md
 프로젝트_기획서.docx
 핵심로직_작업계획_및_검증기준.md
+DATASET.md
+docs/frontend_requirements.md
+sql/erd.md
+감사보고서_독립검증.md
+# 향후 감사·검증 보고서
+*감사보고서*.md
+*_독립검증.md

@@ -8,7 +8,7 @@ Company-X MCP 플랫폼의 대화형 콘솔 UI. [Claude Design](https://claude.a
 이 프론트엔드는 HTTP 브릿지([`bridge/server.py`](../bridge/server.py))를 통해 실제
 백엔드(PostgreSQL/pgvector + Ollama)와 연동된다. 브릿지는 MCP stdio로만 노출되는 세 도구
 파이프라인을 그대로 import해 HTTP POST(`/ask`, `/tool/{name}`, `/health`)로 노출하며,
-응답은 `docs/frontend_requirements.md`의 계약(`{answer, raw_data, tool, source}`)을 따른다.
+응답은 `{answer, raw_data, tool, source}` 계약을 따른다.
 
 [`src/lib/api.js`](src/lib/api.js)가 브릿지를 호출하고 그 응답을 화면 렌더링 형태로 변환한다.
 브릿지 주소 기본값은 `http://127.0.0.1:8000`이며 `VITE_BRIDGE_URL`로 바꿀 수 있다.

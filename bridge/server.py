@@ -2,7 +2,7 @@
 
 백엔드(mcp_server/)는 MCP stdio 프로토콜로만 노출되어 브라우저에서 직접 못 부른다.
 이 서버는 세 도구 파이프라인을 직접 import해서 HTTP POST로 노출한다.
-응답은 docs/frontend_requirements.md의 계약({answer, raw_data, tool, source})을 그대로 따른다.
+응답은 {answer, raw_data, tool, source} 계약을 그대로 따른다.
 
 실행:
   export PGPASSWORD=...           # mcp_reader 비밀번호
